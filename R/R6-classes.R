@@ -50,6 +50,7 @@ PicSureHpdsResourceConnectionBdc <- R6::R6Class("PicSureHpdsResourceConnectionBd
                                                  self$profile_info = jsonlite::fromJSON(api$profile())
                                                  # use singleton dictionary instance
                                                  print("Loading data dictionary... (takes a minute)")
+                                                 flush.console()
                                                  self$dict_instance <- PicSureHpdsDictionary$new(self)
                                                },
                                                query = function(loadQuery=NA) {
