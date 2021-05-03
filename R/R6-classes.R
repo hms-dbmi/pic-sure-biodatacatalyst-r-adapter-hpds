@@ -51,6 +51,7 @@ PicSureHpdsResourceConnectionBdc <- R6::R6Class("PicSureHpdsResourceConnectionBd
                                                  # use singleton dictionary instance
                                                  print("Loading data dictionary... (takes a minute)")
                                                  flush.console()
+                                                 Sys.sleep(0.5)
                                                  self$dict_instance <- PicSureHpdsDictionary$new(self)
                                                },
                                                query = function(loadQuery=NA) {
