@@ -16,7 +16,7 @@ NULL
 #'
 #' @param connection A PIC-SURE connection object.
 #' @param resourceUUID The UUID identity of a Resource hosted via the PIC-SURE connection.
-#' @param verbose Flag to display additional runtime information.
+#' @param isAuth Flag to note if resource is an authenticated resource.
 #' @return An object which provides access to the requested Resource.
 #' @examples
 #'
@@ -24,9 +24,9 @@ NULL
 #'# myres <- hpds::get.resource(connection=myconn, resourceUUID="YOUR-UUID-0000")
 #'
 #' @export
-get.resource <- function(connection, resourceUUID, verbose=FALSE) {
+get.resource <- function(connection, resourceUUID, isAuth) {
   if (class(connection) == "PicSure_Connection") {
-    result <- PicSureHpdsResourceConnectionBdc$new(connection, resourceUUID)
+    result <- PicSureHpdsResourceConnectionBdc$new(connection, resourceUUID, isAuth)
     class(result) <- "Hpds_Resource"
     return(result)
   } else {
@@ -35,7 +35,47 @@ get.resource <- function(connection, resourceUUID, verbose=FALSE) {
   }
 }
 
+#' Get a new reference to the dictionary HPDS-based PIC-SURE resource.
+#'
+#' @param connection A PIC-SURE connection object.
+#' @return An object which provides access to the dictionary resource.
+#' @examples
+#'
+#'# myconn <- picsure::connect(url="http://your.server/PIC-SURE/", token="your-security-token")
+#'# myres <- hpds::use.dictionary(connection=myconn)
+#'
+#' @export
+use.dictionary <- function(connection) {
+  return(get.resource(connection, '36363664-6231-6134-2d38-6538652d3131', TRUE))
+}
 
+#' Get a new reference to the open PIC-SURE HPDS-based resource.
+#'
+#' @param connection A PIC-SURE connection object.
+#' @return An object which provides access to the open PIC-SURE resource.
+#' @examples
+#'
+#'# myconn <- picsure::connect(url="http://your.server/PIC-SURE/", token="your-security-token")
+#'# myres <- hpds::use.openPicSure(connection=myconn)
+#'
+#' @export
+use.openPicSure <- function(connection) {
+  return(get.resource(connection, '70c837be-5ffc-11eb-ae93-0242ac130002', FALSE))
+}
+
+#' Get a new reference to the auth PIC-SURE HPDS-based resource.
+#'
+#' @param connection A PIC-SURE connection object.
+#' @return An object which provides access to the auth PIC-SURE resource.
+#' @examples
+#'
+#'# myconn <- picsure::connect(url="http://your.server/PIC-SURE/", token="your-security-token")
+#'# myres <- hpds::use.authPicSure(connection=myconn)
+#'
+#' @export
+use.authPicSure <- function (connection) {
+  return(get.resource(connection, '02e23f52-f354-4e8b-992c-d37c8b9ba140', TRUE))
+}
 
 # ===== data dictionary functions =====
 
@@ -53,11 +93,11 @@ get.resource <- function(connection, resourceUUID, verbose=FALSE) {
 #'# asthma.terms <- hpds::find.in.dictionary(resource=myres, term="asthma")
 #'
 #' @export
-find.in.dictionary <- function(resource, term="", verbose=FALSE){
+find.in.dictionary <- function(resource, term="", verbose=FALSE, limit=0, offset=0){
   if (class(resource) == "Hpds_Resource") {
     dictionaryObj <- resource$dictionary()
     class(dictionaryObj) <- "Hpds_Dictionary"
-    result <- dictionaryObj$find(term)
+    result <- dictionaryObj$find(term, limit, offset)
     class(result) <- "Hpds_DictionaryResults"
     return(result)
   } else {
@@ -153,8 +193,13 @@ extract.entries <- function(dictionary.results, verbose=FALSE) {
 #'
 #' @export
 extract.dataframe <- function(dictionary.results, verbose=FALSE) {
-  message("The 'extract.dataframe()' function is depricated. Please use `hpds::extract.entries()` instead - it now returns data frames.")
-  stop()
+  if (class(dictionary.results) == "Hpds_DictionaryResults") {
+    result <- dictionary.results$dataframe()
+    return(result)
+  } else {
+    message("Invalid dictionary results was passed to extract.entries() function")
+    stop()
+  }
 }
 
 
@@ -209,10 +254,10 @@ new.query <- function(resource, verbose=FALSE) {
 query.run <- function(query, result.type="dataframe", verbose=FALSE) {
   if (class(query) == "Hpds_Query") {
     result <- switch(result.type,
-                     "count" = query$getCount(),
-                     "results" = query$getResults(),
-                     "dataframe" = query$getResultsDataFrame(),
-                     "crosscount" = query$getResultsCrossCounts()
+      "count" = query$getCount(),
+      "results" = query$getResults(),
+      "dataframe" = query$getResultsDataFrame(),
+      "crosscount" = query$getResultsCrossCounts()
     )
     return(result)
   } else {
