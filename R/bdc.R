@@ -174,6 +174,48 @@ get.paths <- function(dictionary.results) {
   }
 }
 
+#' Get a data frame of consents.
+#'
+#' @param resource A PIC-SURE resource object.
+#' @return A list of HPDS paths.
+#' @examples
+#'
+#'# myconn <- picsure::connect(url="http://your.server/PIC-SURE/", token="your-security-token")
+#'# myres <- hpds::get.resource(connection=myconn, resourceUUID="YOUR-UUID-0000")
+#'# get.consents(myres)
+#'
+#' @export
+get.consents <- function(resource) {
+  if (class(resource) == "Hpds_Resource") {
+    result <- resource$listConsents()
+    return(result)
+  } else {
+    message("Invalid resource was passed to get.consents() function")
+    stop()
+  }
+}
+
+#' Get a list of genomic annotations as a data frame.
+#'
+#' @param resource A PIC-SURE resource object.
+#' @return Results in a dataframe object.
+#' @examples
+#'
+#'# myconn <- picsure::connect(url="http://your.server/PIC-SURE/", token="your-security-token")
+#'# myres <- hpds::get.resource(connection=myconn, resourceUUID="YOUR-UUID-0000")
+#'# get.genotypeAnnotations(myres)
+#'
+#' @export
+get.genotypeAnnotations <- function(resource) {
+  if (class(resource) == "Hpds_Resource") {
+    result <- resource$dictionary()$genotypeAnnotations()
+    return(result)
+  } else {
+    message("Invalid resource was passed to get.genotypeAnnotations() function")
+    stop()
+  }
+}
+
 
 #' Extract the entries of all the results in a given data dictionary lookup.
 #'
@@ -271,7 +313,7 @@ new.query <- function(resource, verbose=FALSE) {
 #'# results <- hpds::query.run(query=myquery)
 #'
 #' @export
-query.run <- function(query, result.type="dataframe", verbose=FALSE) {
+query.run <- function(query, result.type="results", verbose=FALSE) {
   if (class(query) == "Hpds_Query") {
     result <- switch(result.type,
       "count" = query$getCount(),
@@ -619,8 +661,7 @@ query.filter.delete <- function(query, keys, verbose=FALSE) {
 #' @export
 query.show <- function(query, verbose=FALSE) {
   if (class(query) == "Hpds_Query") {
-    result <- query$show()
-    return(result)
+    query$show()
   } else {
     message("The query given to query.show() is not a Hpds_Query typed object")
     stop()

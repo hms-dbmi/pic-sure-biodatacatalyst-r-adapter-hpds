@@ -1,11 +1,16 @@
 library(hash)
 library(hpds)
 
+global_paths = list(
+  consent = "\\_consents\\",
+  harmonized = "\\_harmonized_consent\\",
+  topmed = "\\_topmed_consents\\",
+  dcc_harmonized = "\\DCC Harmonized data set"
+)
 
 # ======================
 #    ADAPTER CODE
 # ======================
-
 
 #' R6 class that allows access to the data dictionary and query services of a selected HPDS-hosted resources on a PIC-SURE network.
 #'
@@ -21,6 +26,7 @@ library(hpds)
 #'   \item{\code{new(connection, resource_uuid)}}{This method is used to create new object of this class which uses the passed PicSureConnection object for communication with the PIC-SURE network along with a UUID to identify a HPDS-hosted resource.}
 #'
 #'   \item{\code{dictionary()}}{This method returns a \code{PicSureHpdsDictionary} object which is used to run lookups against a resources data dictionary.}
+#'   \item{\code{list_consents()}}{This method returns a data frame of consents and their status as harmonized or topmed. }
 #'   \item{\code{query()}}{This method returns a new \code{PicSureHpdsQuery} object configured to run all commands against the previously specified HPDS-hosted resource.}}
 PicSureHpdsResourceConnectionBdc <- R6::R6Class(
   "PicSureHpdsResourceConnectionBdc",
@@ -47,17 +53,26 @@ PicSureHpdsResourceConnectionBdc <- R6::R6Class(
         }
       }
 
-      # cache the profile information on startup
       api = connection$INTERNAL_api_obj()
       self$profile_info = jsonlite::fromJSON(api$profile())
       self$dict_instance <- PicSureHpdsDictionaryBdc$new(self)
     },
-    query = function(loadQuery=NA) {
-      if (is.na(loadQuery)) {
-        return(PicSureHpdsQueryBdc$new(self))
-      } else {
-        return(PicSureHpdsQueryBdc$new(self, loadQuery=loadQuery))
+    listConsents = function() {
+      json = if (is.null(self$profile_info$queryTemplate)) '{}' else self$profile_info$queryTemplate
+      template = jsonlite::fromJSON(json, simplifyVector=FALSE, simplifyDataFrame=FALSE, simplifyMatrix=FALSE)
+      consent_paths = template$categoryFilters[[global_paths$consent]]
+      consent_table = list()
+      for(consent in consent_paths) {
+        consent_table[[(length(consent_table) + 1)]] = list(
+          consent = consent,
+          harmonized = consent %in% template$categoryFilters[[global_paths$harmonized]],
+          topmed = consent %in% template$categoryFilters[[global_paths$topmed]]
+        )
       }
+      return(data.frame(do.call(rbind.data.frame, consent_table)))
+    },
+    query = function() {
+      return(PicSureHpdsQueryBdc$new(self))
     }
   )
 )
@@ -65,7 +80,6 @@ PicSureHpdsResourceConnectionBdc <- R6::R6Class(
 # ========================
 #    DICTIONARY CODE
 # ========================
-
 
 #' R6 class that runs searches against a HPDS resource's data dictionary - DO NOT CREATE THIS OBJECT DIRECTLY!
 #'
@@ -87,7 +101,9 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
   portable = FALSE,
   lock_objects = FALSE,
   private <- list(
-    searchQuery = function(term, limit=0, offset=0) {
+    dictionary_cache = NULL,
+    concept_dictionary = NULL,
+    dictionaryQuery = function(term='', limit=0, offset=0) {
       search <- list(
         query = list(
           searchTerm = term,
@@ -99,6 +115,46 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
         )
       )
       return(jsonlite::toJSON(search, auto_unbox=TRUE))
+    },
+    normalizeDescription = function(text) {
+      text = str_replace(text, "Description=", "")
+      text = str_replace_all(text, "^\"|\"$", "")
+      return(text)
+    },
+    # Populate a hash table/dictionary of phenotype and genotype concepts
+    loadConcepts = function() {
+      # Lazy load all the concepts. We do this because the Dictionary class is used by both 
+      # dictionary and auth/open resources. And this query wont work for dictionary resources, 
+      # so we may as well not load it.
+      if(is.null(private$concept_dictionary)) {
+        # Initial query is blank to get all phenotype and info(genotype) data
+        query = jsonlite::toJSON(list(query=""), auto_unbox=TRUE)
+        results = self$INTERNAL_API_OBJ$search(self$connection$resourceUUID, query)
+        results = jsonlite::fromJSON(results, simplifyVector=FALSE, simplifyDataFrame=FALSE, simplifyMatrix=FALSE)
+
+        private$concept_dictionary = hash()
+        types = names(results$results)
+        for (type_index in 1:length(results$results)){
+          type = types[[type_index]]
+          HpdsDataType = gsub("phenotypes", "phenotype", type)
+          rows = results$results[[type_index]]
+          row_names = names(rows)
+          for (row_index in 1:length(rows)){
+            row = rows[[row_index]]
+            name = row_names[[row_index]]
+            categorical = (isTRUE(row$categorical) | isFALSE(row$continuous))
+            values = if (type == "phenotypes") row$categoryValues else row$values
+            entry = list(
+              name = name,
+              HpdsDataType = HpdsDataType,
+              categorical = categorical,
+              categoryValues = if (categorical) values else list(),
+              description = if (type == "info") private$normalizeDescription(row$description) else ""
+            )
+            private$concept_dictionary[paste0(type, "_", name)] = entry
+          }
+        }
+      }
     }
   ),
   public = list(
@@ -106,18 +162,42 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
       self$connection <- refHpdsResourceConnection
       self$resourceUUID <- refHpdsResourceConnection$resourceUUID
       self$INTERNAL_API_OBJ <- refHpdsResourceConnection$connection_reference$INTERNAL_api_obj()
-      self$dictionary_cache <- NULL
     },
-    find = function(term="", limit, offset, showAll=FALSE) {
+    getKeyInfo = function(key) {
+      private$loadConcepts()
+      index = paste0("phenotypes_", key)
+      if (has.key(index, private$concept_dictionary)) {
+        return(get(index, private$concept_dictionary)) 
+      } else {
+        return()
+      }
+    },
+    genotypeAnnotations = function() {
+      private$loadConcepts()
+      concepts = keys(private$concept_dictionary)
+      concepts = concepts[sapply(concepts, function(concept) str_detect(concept, 'info_'))]
+      annotations = list()
+      for (concept_name in concepts) {
+        concept = get(concept_name, private$concept_dictionary)
+        annotations[[(length(annotations) + 1)]] = list(
+          genomic_annotation = concept$name,
+          description = concept$description,
+          values = toString(concept$categoryValues),
+          continuous = !concept$categorical
+        )
+      }
+      return(data.frame(do.call(rbind.data.frame, annotations)))
+    },
+    find = function(term, limit, offset, showAll=FALSE) {
       print("Loading data dictionary... (takes a minute)")
       flush.console() # print loading message while we wait for json result and processing
 
-      query <- private$searchQuery(term, limit, offset)
+      query <- private$dictionaryQuery(term, limit, offset)
       results <- self$INTERNAL_API_OBJ$search(self$resourceUUID, query)
       results <- jsonlite::fromJSON(results, simplifyVector=FALSE, simplifyDataFrame=FALSE, simplifyMatrix=FALSE)
-      self$dictionary_cache <- PicSureHpdsDictionaryBdcResult$new(results$results, self$connection$profile_info$queryScopes, showAll)
-        
-      return(self$dictionary_cache)
+      private$dictionary_cache <- PicSureHpdsDictionaryBdcResult$new(results$results, self$connection$profile_info$queryScopes, showAll)
+      
+      return(private$dictionary_cache)
     }
   )
 )
@@ -147,6 +227,8 @@ PicSureHpdsDictionaryBdcResult <- R6::R6Class(
   portable = FALSE,
   lock_objects = FALSE,
   private = list(
+  paths = c(),
+  results = list(),
     projectAndFilter = function(results, scopes, showAll) {
       scopes <- gsub("\\", "\\\\", scopes, fixed = TRUE) # escape slashes for regex processing
       in_scope = function(study) Reduce(function(acc, scope) (acc | str_detect(study, paste0("(^(", scope, ")|^\\\\(", scope, "))"))), scopes, init=FALSE)
@@ -184,35 +266,33 @@ PicSureHpdsDictionaryBdcResult <- R6::R6Class(
   public = list(
     initialize = function(results, queryScopes, showAll = FALSE) {
       projected <- private$projectAndFilter(results$searchResults, queryScopes, showAll)
-      self$paths <- projected$paths
-      self$results <- projected$results
+      private$paths <- projected$paths
+      private$results <- projected$results
     },
     count = function() {
-      return(length(self$results))
+      return(length(private$results))
     },
     entries = function() {
-      return(self$results)
+      return(private$results)
     },
     varInfo = function(path) {
-      result <- self$results[[match(path, paths)]]
+      result <- private$results[[match(path, paths)]]
       info <- data.frame(unlist(result, use.names=FALSE), row.names=names(result))
       names(info) <- path
       return(info)
     },
-    listPaths = function() {
-      return(self$paths)
+    paths = function() {
+      return(private$paths)
     },
     dataframe = function() {
-      return(data.frame(do.call(rbind.data.frame, self$results)))
+      return(data.frame(do.call(rbind.data.frame, private$results)))
     }
   )
 )
 
-
 # ===================
 #     QUERY CODE
 # ===================
-
 
 #' R6 class used to build a multi-use query to search against a HPDS resource's data - DO NOT CREATE THIS OBJECT DIRECTLY!
 #'
@@ -245,20 +325,13 @@ PicSureHpdsQueryBdc <- R6::R6Class(
   portable = FALSE,
   lock_objects = FALSE,
   private = list(
-    query_template = "",
-    harmonized_path = "\\DCC Harmonized data set",
-    consent_path_harmonized = "\\_harmonized_consent\\",
-    consent_path_topmed = "\\_topmed_consents\\",
-    harmonized_consents = c(),
-    topmed_consents = c()
+    query_template = ""
   ),
   public = list(
     initialize = function(connection) {
       super$initialize(connection)
       # Save the consents from the default queryTemplate
       private$query_template = jsonlite::fromJSON(connection$profile_info$queryTemplate)
-      private$harmonized_consents = private$query_template$categoryFilters[[private$consent_path_harmonized]]
-      private$topmed_consents = private$query_template$categoryFilters[[private$consent_path_topmed]]
     },
     buildQuery = function(resultType="COUNT") {
       ret <- jsonlite::fromJSON(
@@ -290,21 +363,24 @@ PicSureHpdsQueryBdc <- R6::R6Class(
       temp_name = c(temp_name, ret$query$anyRecordOf)
       temp_name = c(temp_name, names(ret$query$numericFilters))
       temp_name = c(temp_name, names(ret$query$categoryFilters))
-      if (length(temp_name[str_detect(temp_name, private$harmonized_path)]) > 0) {
+
+      harmonized_consents = private$query_template$categoryFilters[[global_paths$harmonized]]
+      topmed_consents = private$query_template$categoryFilters[[global_paths$topmed]]
+      if (length(temp_name[str_detect(temp_name, global_paths$dcc_harmonized)]) > 0) {
         # add harmonized consents to filter
-        ret$query$categoryFilters[[private$consent_path_harmonized]] = private$harmonized_consents
+        ret$query$categoryFilters[[global_paths$harmonized]] = private$harmonized_consents
       } else {
         # remove harmonized consents from filter
-        ret$query$categoryFilters[[private$consent_path_harmonized]] = NULL
+        ret$query$categoryFilters[[global_paths$harmonized]] = NULL
       }
 
       # see if query needs topmed consents
       if(length(ret$query$variantInfoFilters[[1]]$categoryVariantInfoFilters) > 0 || length(ret$query$variantInfoFilters[[1]]$numericVariantInfoFilters) > 0) {
         # add topmed consents to filter
-        ret$query$categoryFilters[[private$consent_path_topmed]] = private$topmed_consents
+        ret$query$categoryFilters[[global_paths$topmed]] = private$topmed_consents
       } else {
         # remove topmed consents from filter
-        ret$query$categoryFilters[[private$consent_path_topmed]] = NULL
+        ret$query$categoryFilters[[global_paths$topmed]] = NULL
       }
 
       if (!(isFALSE(self$resourceUUID))) {
