@@ -28,7 +28,6 @@ PicSureHpdsResourceConnectionBdc <- R6::R6Class(
   portable = FALSE,
   lock_objects = FALSE,
   public = list(
-    isAuth = TRUE,
     initialize = function(connection, resource_uuid, isAuth=TRUE) {
       self$isAuth = isAuth
       self$connection_reference <- connection
@@ -87,21 +86,19 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
   "PicSureHpdsDictionaryBdc",
   portable = FALSE,
   lock_objects = FALSE,
-  private = list(
-    findQuery = function(term, limit=0, offset=0) {
-      query <- list()
-      query$query$searchTerm <- term
-      query$query$includedTags <- list()
-      query$query$excludedTags <- list()
-      query$query$returnTags <- TRUE
-      query$query$offset <- offset
-      if(limit == 0){
-        query$query$limit <- 10000
-      } else {
-        query$query$limit <- limit
-      }
-      query = jsonlite::toJSON(query, auto_unbox=TRUE)
-      return(query)
+  private <- list(
+    searchQuery = function(term, limit=0, offset=0) {
+      search <- list(
+        query = list(
+          searchTerm = term,
+          includedTags = list(),
+          excludedTags = list(),
+          returnTags = TRUE,
+          offset = offset,
+          limit = if(limit == 0) 10000 else limit
+        )
+      )
+      return(jsonlite::toJSON(search, auto_unbox=TRUE))
     }
   ),
   public = list(
@@ -112,11 +109,10 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
       self$dictionary_cache <- NULL
     },
     find = function(term="", limit, offset, showAll=FALSE) {
-      query <- private$findQuery(term, limit, offset)
-      print(query)
       print("Loading data dictionary... (takes a minute)")
-      flush.console()
+      flush.console() # print loading message while we wait for json result and processing
 
+      query <- private$searchQuery(term, limit, offset)
       results <- self$INTERNAL_API_OBJ$search(self$resourceUUID, query)
       results <- jsonlite::fromJSON(results, simplifyVector=FALSE, simplifyDataFrame=FALSE, simplifyMatrix=FALSE)
       self$dictionary_cache <- PicSureHpdsDictionaryBdcResult$new(results$results, self$connection$profile_info$queryScopes, showAll)
@@ -151,41 +147,43 @@ PicSureHpdsDictionaryBdcResult <- R6::R6Class(
   portable = FALSE,
   lock_objects = FALSE,
   private = list(
-    projectColumns = function(results, scopes, showAll) {
+    projectAndFilter = function(results, scopes, showAll) {
       scopes <- gsub("\\", "\\\\", scopes, fixed = TRUE) # escape slashes for regex processing
       in_scope = function(study) Reduce(function(acc, scope) (acc | str_detect(study, paste0("(^(", scope, ")|^\\\\(", scope, "))"))), scopes, init=FALSE)
-      filter_list <- c()
+      include_list <- c()
       paths <- c()
       for (index in 1:length(results)) {
-        result <- results[[index]]$result
-        if (showAll | in_scope(result$metadata$columnmeta_HPDS_PATH)) {
-          paths <- c(paths, result$metadata$columnmeta_HPDS_PATH)
-          results[[index]] <- list(
-            var_name = result$metadata$derived_var_name,
-            var_description = result$metadata$derived_var_description,
-            data_type = result$metadata$columnmeta_data_type,
-            group_id = result$metadata$derived_group_id,
-            group_name = result$metadata$derived_group_name,
-            group_description = result$metadata$derived_group_description,
-            study_id = result$metadata$derived_study_id,
-            study_description = result$metadata$derived_study_description,
-            is_stigmatized = result$metadata$is_stigmatized,
-            HPDS_PATH = result$metadata$columnmeta_HPDS_PATH,
-            min = if (result$is_categorical) NA else result$metadata$columnmeta_min,
-            max = if (result$is_categorical) NA else result$metadata$columnmeta_max,
-            values = result$metadata$values
-          )
-        } else {
-          filter_list <- c(filter_list, index)
+        result <- results[[index]]$result$metadata
+        if (!(showAll | in_scope(result$columnmeta_HPDS_PATH))) {
+          # nullify to release memory and skip
+          results[[index]] <- NULL
+          next
         }
+        paths <- c(paths, result$columnmeta_HPDS_PATH)
+        categorical = results[[index]]$result$is_categorical
+        results[[index]] <- list( # change in place to reduce overhead
+          var_name = result$derived_var_name,
+          var_description = result$derived_var_description,
+          data_type = result$columnmeta_data_type,
+          group_id = result$derived_group_id,
+          group_name = result$derived_group_name,
+          group_description = result$derived_group_description,
+          study_id = result$derived_study_id,
+          study_description = result$derived_study_description,
+          is_stigmatized = result$is_stigmatized,
+          HPDS_PATH = result$columnmeta_HPDS_PATH,
+          min = if (categorical) NA else result$columnmeta_min,
+          max = if (categorical) NA else result$columnmeta_max,
+          values = result$values
+        )
+        include_list <- c(include_list, index)
       }
-      if (length(filter_list) > 0) results <- results[-filter_list]
-      return(list(results=results, paths=paths))
+      return(list(results=results[include_list], paths=paths))
     }
   ),
   public = list(
     initialize = function(results, queryScopes, showAll = FALSE) {
-      projected <- private$projectColumns(results$searchResults, queryScopes, showAll)
+      projected <- private$projectAndFilter(results$searchResults, queryScopes, showAll)
       self$paths <- projected$paths
       self$results <- projected$results
     },
@@ -196,11 +194,8 @@ PicSureHpdsDictionaryBdcResult <- R6::R6Class(
       return(self$results)
     },
     varInfo = function(path) {
-      path_index <- match(path, paths)
-      record <- self$results[[path_index]]
-      keys <- names(record)
-      values <- unlist(record, use.names=FALSE)
-      info <- data.frame(values, row.names=keys)
+      result <- self$results[[match(path, paths)]]
+      info <- data.frame(unlist(result, use.names=FALSE), row.names=names(result))
       names(info) <- path
       return(info)
     },

@@ -107,49 +107,69 @@ find.in.dictionary <- function(resource, term="", verbose=FALSE, limit=0, offset
 }
 
 
-#' Extract the number of results in the given data dictionary lookup.
+#' Get the number of results returned in the given data dictionary lookup.
 #'
 #' @param dictionary.results A data dictionary search results object.
-#' @param verbose Flag to display additional runtime information.
 #' @return An integer of how many data dictionary entries were found in
 #' @examples
 #'
 #'# myconn <- picsure::connect(url="http://your.server/PIC-SURE/", token="your-security-token")
 #'# myres <- hpds::get.resource(connection=myconn, resourceUUID="YOUR-UUID-0000")
 #'# asthma.terms <- hpds::find.in.dictionary(resource=myres, term="asthma")
-#'# extract.count(asthma.terms)
+#'# get.count(asthma.terms)
 #'
 #' @export
-extract.count <- function(dictionary.results, verbose=FALSE) {
+get.count <- function(dictionary.results) {
   if (class(dictionary.results) == "Hpds_DictionaryResults") {
     result <- dictionary.results$count()
     return(result)
   } else {
-    message("Invalid dictionary results was passed to extract.count() function")
+    message("Invalid dictionary results was passed to get.count() function")
     stop()
   }
 }
 
-
-#' Extract the unique keys of all the results in a given data dictionary lookup.
+#' Get variable info for a given path.
 #'
 #' @param dictionary.results A data dictionary search results object.
-#' @param verbose Flag to display additional runtime information.
-#' @return A list of unique keys for all the data dictionary search results.
+#' @param path A character object containing an HPDS path.
+#' @return A data frame object containing variable info for an HPDS path.
 #' @examples
 #'
 #'# myconn <- picsure::connect(url="http://your.server/PIC-SURE/", token="your-security-token")
 #'# myres <- hpds::get.resource(connection=myconn, resourceUUID="YOUR-UUID-0000")
 #'# asthma.terms <- hpds::find.in.dictionary(resource=myres, term="asthma")
-#'# extract.keys(asthma.terms)
+#'# get.varInfo(asthma.terms, '\\phs001211\\...')
 #'
 #' @export
-extract.keys <- function(dictionary.results, verbose=FALSE) {
+get.varInfo <- function(dictionary.results, path) {
   if (class(dictionary.results) == "Hpds_DictionaryResults") {
-    result <- dictionary.results$keys()
+    result <- dictionary.results$varInfo(path)
     return(result)
   } else {
-    message("Invalid dictionary results was passed to extract.keys() function")
+    message("Invalid dictionary results was passed to get.varInfo() function")
+    stop()
+  }
+}
+
+#' Get a list of HPDS paths.
+#'
+#' @param dictionary.results A data dictionary search results object.
+#' @return A list of HPDS paths.
+#' @examples
+#'
+#'# myconn <- picsure::connect(url="http://your.server/PIC-SURE/", token="your-security-token")
+#'# myres <- hpds::get.resource(connection=myconn, resourceUUID="YOUR-UUID-0000")
+#'# asthma.terms <- hpds::find.in.dictionary(resource=myres, term="asthma")
+#'# get.paths(asthma.terms)
+#'
+#' @export
+get.paths <- function(dictionary.results) {
+  if (class(dictionary.results) == "Hpds_DictionaryResults") {
+    result <- dictionary.results$paths()
+    return(result)
+  } else {
+    message("Invalid dictionary results was passed to get.paths() function")
     stop()
   }
 }
@@ -197,7 +217,7 @@ extract.dataframe <- function(dictionary.results, verbose=FALSE) {
     result <- dictionary.results$dataframe()
     return(result)
   } else {
-    message("Invalid dictionary results was passed to extract.entries() function")
+    message("Invalid dictionary result was passed to extract.entries() function")
     stop()
   }
 }
