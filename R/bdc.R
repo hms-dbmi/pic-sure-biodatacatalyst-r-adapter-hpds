@@ -166,7 +166,7 @@ get.varInfo <- function(dictionary.results, path) {
 #' @export
 get.paths <- function(dictionary.results) {
   if (class(dictionary.results) == "Hpds_DictionaryResults") {
-    result <- dictionary.results$paths()
+    result <- dictionary.results$listPaths()
     return(result)
   } else {
     message("Invalid dictionary results was passed to get.paths() function")
