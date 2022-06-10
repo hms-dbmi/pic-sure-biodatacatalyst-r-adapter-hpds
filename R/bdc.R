@@ -187,7 +187,7 @@ get.paths <- function(dictionary.results) {
 #' @export
 get.consents <- function(resource) {
   if (class(resource) == "Hpds_Resource") {
-    result <- resource$listConsents()
+    result <- resource$consents()
     return(result)
   } else {
     message("Invalid resource was passed to get.consents() function")

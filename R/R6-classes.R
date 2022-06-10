@@ -26,7 +26,7 @@ global_paths = list(
 #'   \item{\code{new(connection, resource_uuid)}}{This method is used to create new object of this class which uses the passed PicSureConnection object for communication with the PIC-SURE network along with a UUID to identify a HPDS-hosted resource.}
 #'
 #'   \item{\code{dictionary()}}{This method returns a \code{PicSureHpdsDictionary} object which is used to run lookups against a resources data dictionary.}
-#'   \item{\code{list_consents()}}{This method returns a data frame of consents and their status as harmonized or topmed. }
+#'   \item{\code{consents()}}{This method returns a data frame of consents and their status as harmonized or topmed. }
 #'   \item{\code{query()}}{This method returns a new \code{PicSureHpdsQuery} object configured to run all commands against the previously specified HPDS-hosted resource.}}
 PicSureHpdsResourceConnectionBdc <- R6::R6Class(
   "PicSureHpdsResourceConnectionBdc",
@@ -35,9 +35,6 @@ PicSureHpdsResourceConnectionBdc <- R6::R6Class(
   lock_objects = FALSE,
   public = list(
     initialize = function(connection, resource_uuid, isAuth=TRUE) {
-      self$isAuth = isAuth
-      self$connection_reference <- connection
-      self$profile_info = jsonlite::fromJSON("{}")
       if (missing(resource_uuid)) {
         if (length(self$connection_reference$self$resource_uuids) > 1) {
           print(self$connection_reference$self$resource_uuids)
@@ -53,11 +50,12 @@ PicSureHpdsResourceConnectionBdc <- R6::R6Class(
         }
       }
 
-      api = connection$INTERNAL_api_obj()
-      self$profile_info = jsonlite::fromJSON(api$profile())
+      self$isAuth = isAuth
+      self$connection_reference <- connection
+      self$profile_info = jsonlite::fromJSON(connection$INTERNAL_api_obj()$profile())
       self$dict_instance <- PicSureHpdsDictionaryBdc$new(self)
     },
-    listConsents = function() {
+    consents = function() {
       json = if (is.null(self$profile_info$queryTemplate)) '{}' else self$profile_info$queryTemplate
       template = jsonlite::fromJSON(json, simplifyVector=FALSE, simplifyDataFrame=FALSE, simplifyMatrix=FALSE)
       consent_paths = template$categoryFilters[[global_paths$consent]]
@@ -101,8 +99,6 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
   portable = FALSE,
   lock_objects = FALSE,
   private <- list(
-    dictionary_cache = NULL,
-    concept_dictionary = NULL,
     dictionaryQuery = function(term='', limit=0, offset=0) {
       search <- list(
         query = list(
