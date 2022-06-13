@@ -47,7 +47,7 @@ get.resource <- function(connection, resourceUUID, verbose=FALSE) {
 #'
 #' @export
 use.dictionary <- function(connection, verbose=FALSE) {
-  return(get.resource(connection, '36363664-6231-6134-2d38-6538652d3131'))
+  return(get.resource(connection, '36363664-6231-6134-2d38-6538652d3131', verbose))
 }
 
 #' Get a new reference to the open PIC-SURE HPDS-based resource.
@@ -62,7 +62,7 @@ use.dictionary <- function(connection, verbose=FALSE) {
 #'
 #' @export
 use.openPicSure <- function(connection, verbose=FALSE) {
-  return(get.resource(connection, '70c837be-5ffc-11eb-ae93-0242ac130002'))
+  return(get.resource(connection, '70c837be-5ffc-11eb-ae93-0242ac130002', verbose))
 }
 
 #' Get a new reference to the auth PIC-SURE HPDS-based resource.
@@ -77,7 +77,7 @@ use.openPicSure <- function(connection, verbose=FALSE) {
 #'
 #' @export
 use.authPicSure <- function (connection, verbose=FALSE) {
-  return(get.resource(connection, '02e23f52-f354-4e8b-992c-d37c8b9ba140'))
+  return(get.resource(connection, '02e23f52-f354-4e8b-992c-d37c8b9ba140', verbose))
 }
 
 # ===== data dictionary functions =====
