@@ -27,9 +27,6 @@ For full documentation of each method go to https://github.com/hms-dbmi/pic-sure
 \if{html}{\out{<a id="method-PicSureHpdsDictionaryBdc-new"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsDictionaryBdc-new}{}}}
 \subsection{Method \code{new()}}{
-Populate a hash/dictionary of phenotype and genotype concepts.
-
-
 This method is used to create new PicSureHpdsDictionaryBdc object. DO NOT CREATE THIS OBJECT DIRECTLY!
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsDictionaryBdc$new(resourceConnection)}\if{html}{\out{</div>}}
@@ -38,7 +35,7 @@ This method is used to create new PicSureHpdsDictionaryBdc object. DO NOT CREATE
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{resourceConnection}}{A `PicSureHpdsResourceConnectionBdc` object.}
+\item{\code{resourceConnection}}{A \code{\link{bdc::PicSureHpdsResourceConnectionBdc}} object.}
 }
 \if{html}{\out{</div>}}
 }
@@ -73,14 +70,14 @@ Returns genotype annotations from info concept paths.
 }
 
 \subsection{Returns}{
-a `Data.Frame` object containing a table of genotype annotations.
+a \code{\link{data.frame}} object containing a table of genotype annotations.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PicSureHpdsDictionaryBdc-find"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsDictionaryBdc-find}{}}}
 \subsection{Method \code{find()}}{
-This method returns a `PicSureHpdsDictionaryBdcResult` object containing the results of the search on the HPDS resource's data dictionary.
+This method returns a PicSureHpdsDictionaryBdcResult object containing the results of the search on the HPDS resource's data dictionary.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsDictionaryBdc$find(term, limit, offset, showAll = FALSE)}\if{html}{\out{</div>}}
 }
@@ -99,7 +96,7 @@ This method returns a `PicSureHpdsDictionaryBdcResult` object containing the res
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A `PicSureHpdsDictionaryBdcResult` object containing results from the dictionary.
+A \code{\link{bdc::PicSureHpdsDictionaryBdcResult}} object containing results from the dictionary.
 }
 }
 \if{html}{\out{<hr>}}

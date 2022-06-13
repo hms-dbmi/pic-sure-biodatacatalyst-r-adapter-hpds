@@ -49,7 +49,7 @@ For full documentation of each method go to https://github.com/hms-dbmi/pic-sure
 \if{html}{\out{<a id="method-PicSureHpdsQueryBdc-new"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsQueryBdc-new}{}}}
 \subsection{Method \code{new()}}{
-This method is used to create new `PicSureHpdsQueryBdc` object. DO NOT CREATE THIS OBJECT DIRECTLY!
+This method is used to create new PicSureHpdsQueryBdc object. DO NOT CREATE THIS OBJECT DIRECTLY!
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsQueryBdc$new(connection)}\if{html}{\out{</div>}}
 }
@@ -57,7 +57,7 @@ This method is used to create new `PicSureHpdsQueryBdc` object. DO NOT CREATE TH
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{connection}}{A `PicSureHpdsResourceConnectionBdc` object.}
+\item{\code{connection}}{A \code{\link{bdc::PicSureHpdsResourceConnectionBdc}} object.}
 }
 \if{html}{\out{</div>}}
 }

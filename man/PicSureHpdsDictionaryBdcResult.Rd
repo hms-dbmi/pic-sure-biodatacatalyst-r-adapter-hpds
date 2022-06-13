@@ -29,10 +29,7 @@ For full documentation of each method go to https://github.com/hms-dbmi/pic-sure
 \if{html}{\out{<a id="method-PicSureHpdsDictionaryBdcResult-new"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsDictionaryBdcResult-new}{}}}
 \subsection{Method \code{new()}}{
-Project and filter fields in query scope from results, mapping them with new field names.
-
-
-This method is used to create PicSureHpdsDictionaryBdcResult object. DO NOT CREATE THIS OBJECT DIRECTLY!
+This method is used to create a PicSureHpdsDictionaryBdcResult object. DO NOT CREATE THIS OBJECT DIRECTLY!
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsDictionaryBdcResult$new(results, scopes, showAll = FALSE)}\if{html}{\out{</div>}}
 }
@@ -47,9 +44,6 @@ This method is used to create PicSureHpdsDictionaryBdcResult object. DO NOT CREA
 \item{\code{showAll}}{Show all studies, not just ones within connection query scopes.}
 }
 \if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A list that contains paths and filtered results.
 }
 }
 \if{html}{\out{<hr>}}
@@ -95,7 +89,7 @@ Display all information available on a particular HPDS_PATH corresponding to a s
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A `Data.Frame` containing the fields for the given path.
+A \code{\link{data.frame}} containing the fields for the given path.
 }
 }
 \if{html}{\out{<hr>}}
@@ -115,13 +109,13 @@ A list of paths returned from the results.
 \if{html}{\out{<a id="method-PicSureHpdsDictionaryBdcResult-dataframe"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsDictionaryBdcResult-dataframe}{}}}
 \subsection{Method \code{dataframe()}}{
-Flatten the results into a dataframe.
+Flatten the results into a \code{\link{data.frame}}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsDictionaryBdcResult$dataframe()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-A `Data.Frame` of all results.
+A \code{\link{data.frame}} of all results.
 }
 }
 \if{html}{\out{<hr>}}

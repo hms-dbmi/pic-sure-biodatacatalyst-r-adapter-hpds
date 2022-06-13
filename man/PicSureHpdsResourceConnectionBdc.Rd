@@ -47,7 +47,7 @@ This method is used to create new object of this class which uses the passed Pic
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{connection}}{A PIC-SURE connection object.}
+\item{\code{connection}}{A \code{\link{picsure::PicSureConnection}} PIC-SURE connection object.}
 
 \item{\code{resource_uuid}}{The UUID identity of a Resource hosted via the PIC-SURE connection.}
 }
@@ -64,20 +64,20 @@ This method returns a data frame of consents and their status as harmonized or t
 }
 
 \subsection{Returns}{
-A `Data.Frame` object containing concents and if they are topmed or harmonized.
+A \code{\link{data.frame}} object containing concents and if they are topmed or harmonized.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PicSureHpdsResourceConnectionBdc-query"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsResourceConnectionBdc-query}{}}}
 \subsection{Method \code{query()}}{
-This method returns a new `PicSureHpdsQueryBdc` object configured to run all commands against the previously specified HPDS-hosted resource.
+This method returns a new \code{\link{bdc::PicSureHpdsQueryBdc}} object configured to run all commands against the previously specified HPDS-hosted resource.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsResourceConnectionBdc$query()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-A `PicSureHpdsQueryBdc` object.
+A \code{\link{bdc::PicSureHpdsQueryBdc}} object.
 }
 }
 \if{html}{\out{<hr>}}
