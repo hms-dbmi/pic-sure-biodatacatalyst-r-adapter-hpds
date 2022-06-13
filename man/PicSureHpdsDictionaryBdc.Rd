@@ -3,19 +3,13 @@
 \docType{class}
 \name{PicSureHpdsDictionaryBdc}
 \alias{PicSureHpdsDictionaryBdc}
-\title{R6 class that runs searches against a HPDS resource's data dictionary - DO NOT CREATE THIS OBJECT DIRECTLY!
-For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds}
-\format{
-\code{\link{PicSureHpdsDictionary}} object.
-}
+\title{PicSureHpdsDictionaryBdc}
 \value{
 Object of \code{\link{R6Class}} used to access a HPDS-hosted resource's data dictionary.
 }
 \description{
 R6 class that runs searches against a HPDS resource's data dictionary - DO NOT CREATE THIS OBJECT DIRECTLY!
-For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds
 
-R6 class that runs searches against a HPDS resource's data dictionary - DO NOT CREATE THIS OBJECT DIRECTLY!
 For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds
 }
 \keyword{data}
@@ -34,7 +28,9 @@ For full documentation of each method go to https://github.com/hms-dbmi/pic-sure
 \if{latex}{\out{\hypertarget{method-PicSureHpdsDictionaryBdc-new}{}}}
 \subsection{Method \code{new()}}{
 Populate a hash/dictionary of phenotype and genotype concepts.
-This method is used to create new object of this class. DO NOT CREATE THIS OBJECT DIRECTLY!
+
+
+This method is used to create new PicSureHpdsDictionaryBdc object. DO NOT CREATE THIS OBJECT DIRECTLY!
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsDictionaryBdc$new(resourceConnection)}\if{html}{\out{</div>}}
 }
@@ -42,8 +38,7 @@ This method is used to create new object of this class. DO NOT CREATE THIS OBJEC
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{resourceConnection}}{A `PicSureHpdsResourceConnectionBdc` object.
-Helper method to return key/path information from phenotype concept paths.}
+\item{\code{resourceConnection}}{A `PicSureHpdsResourceConnectionBdc` object.}
 }
 \if{html}{\out{</div>}}
 }
@@ -52,6 +47,7 @@ Helper method to return key/path information from phenotype concept paths.}
 \if{html}{\out{<a id="method-PicSureHpdsDictionaryBdc-getKeyInfo"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsDictionaryBdc-getKeyInfo}{}}}
 \subsection{Method \code{getKeyInfo()}}{
+Helper method to return key/path information from phenotype concept paths.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsDictionaryBdc$getKeyInfo(key)}\if{html}{\out{</div>}}
 }
@@ -65,26 +61,26 @@ Helper method to return key/path information from phenotype concept paths.}
 }
 \subsection{Returns}{
 Concept path information or FALSE.
-Returns genotype annotations from info concept paths.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PicSureHpdsDictionaryBdc-genotypeAnnotations"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsDictionaryBdc-genotypeAnnotations}{}}}
 \subsection{Method \code{genotypeAnnotations()}}{
+Returns genotype annotations from info concept paths.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsDictionaryBdc$genotypeAnnotations()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
 a `Data.Frame` object containing a table of genotype annotations.
-This method returns a `PicSureHpdsDictionaryBdcResult` object containing the results of the search on the HPDS resource's data dictionary.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PicSureHpdsDictionaryBdc-find"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsDictionaryBdc-find}{}}}
 \subsection{Method \code{find()}}{
+This method returns a `PicSureHpdsDictionaryBdcResult` object containing the results of the search on the HPDS resource's data dictionary.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsDictionaryBdc$find(term, limit, offset, showAll = FALSE)}\if{html}{\out{</div>}}
 }

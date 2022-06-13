@@ -3,20 +3,13 @@
 \docType{class}
 \name{PicSureHpdsResourceConnectionBdc}
 \alias{PicSureHpdsResourceConnectionBdc}
-\title{R6 class that allows access to the data dictionary and query services of a selected HPDS-hosted resources on a PIC-SURE network.
-For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds}
-\format{
-\code{\link{PicSureHpdsResourceConnectionBdc}} object.
-This method is used to create new object of this class which uses the passed PicSureConnection object for communication with the PIC-SURE network along with a UUID to identify a HPDS-hosted resource.
-}
+\title{PicSureHpdsResourceConnectionBdc}
 \value{
 Object of \code{\link{R6Class}} used to access the dictionary and query services via the objects it returns.
 }
 \description{
 R6 class that allows access to the data dictionary and query services of a selected HPDS-hosted resources on a PIC-SURE network.
-For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds
 
-R6 class that allows access to the data dictionary and query services of a selected HPDS-hosted resources on a PIC-SURE network.
 For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds
 }
 \keyword{data}
@@ -46,6 +39,7 @@ For full documentation of each method go to https://github.com/hms-dbmi/pic-sure
 \if{html}{\out{<a id="method-PicSureHpdsResourceConnectionBdc-new"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsResourceConnectionBdc-new}{}}}
 \subsection{Method \code{new()}}{
+This method is used to create new object of this class which uses the passed PicSureConnection object for communication with the PIC-SURE network along with a UUID to identify a HPDS-hosted resource.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsResourceConnectionBdc$new(connection, resource_uuid)}\if{html}{\out{</div>}}
 }
@@ -55,8 +49,7 @@ For full documentation of each method go to https://github.com/hms-dbmi/pic-sure
 \describe{
 \item{\code{connection}}{A PIC-SURE connection object.}
 
-\item{\code{resource_uuid}}{The UUID identity of a Resource hosted via the PIC-SURE connection.
-This method returns a data frame of consents and their status as harmonized or topmed.}
+\item{\code{resource_uuid}}{The UUID identity of a Resource hosted via the PIC-SURE connection.}
 }
 \if{html}{\out{</div>}}
 }
@@ -65,19 +58,20 @@ This method returns a data frame of consents and their status as harmonized or t
 \if{html}{\out{<a id="method-PicSureHpdsResourceConnectionBdc-consents"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsResourceConnectionBdc-consents}{}}}
 \subsection{Method \code{consents()}}{
+This method returns a data frame of consents and their status as harmonized or topmed.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsResourceConnectionBdc$consents()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
 A `Data.Frame` object containing concents and if they are topmed or harmonized.
-This method returns a new `PicSureHpdsQueryBdc` object configured to run all commands against the previously specified HPDS-hosted resource.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PicSureHpdsResourceConnectionBdc-query"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsResourceConnectionBdc-query}{}}}
 \subsection{Method \code{query()}}{
+This method returns a new `PicSureHpdsQueryBdc` object configured to run all commands against the previously specified HPDS-hosted resource.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsResourceConnectionBdc$query()}\if{html}{\out{</div>}}
 }

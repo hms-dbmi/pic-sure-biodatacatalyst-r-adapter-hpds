@@ -3,20 +3,13 @@
 \docType{class}
 \name{PicSureHpdsDictionaryBdcResult}
 \alias{PicSureHpdsDictionaryBdcResult}
-\title{R6 class contain the results of a search against a HPDS resource's data dictionary - DO NOT CREATE THIS OBJECT DIRECTLY!
-For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds}
-\format{
-\code{\link{PicSureHpdsDictionaryResult}} object.
-Project and filter fields in query scope from results, mapping them with new field names.
-}
+\title{PicSureHpdsDictionaryBdcResult}
 \value{
 Object of \code{\link{R6Class}} used to access a HPDS-hosted resource's data dictionary.
 }
 \description{
 R6 class contain the results of a search against a HPDS resource's data dictionary - DO NOT CREATE THIS OBJECT DIRECTLY!
-For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds
 
-R6 class contain the results of a search against a HPDS resource's data dictionary - DO NOT CREATE THIS OBJECT DIRECTLY!
 For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds
 }
 \keyword{data}
@@ -36,6 +29,10 @@ For full documentation of each method go to https://github.com/hms-dbmi/pic-sure
 \if{html}{\out{<a id="method-PicSureHpdsDictionaryBdcResult-new"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsDictionaryBdcResult-new}{}}}
 \subsection{Method \code{new()}}{
+Project and filter fields in query scope from results, mapping them with new field names.
+
+
+This method is used to create PicSureHpdsDictionaryBdcResult object. DO NOT CREATE THIS OBJECT DIRECTLY!
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsDictionaryBdcResult$new(results, scopes, showAll = FALSE)}\if{html}{\out{</div>}}
 }
@@ -47,46 +44,45 @@ For full documentation of each method go to https://github.com/hms-dbmi/pic-sure
 
 \item{\code{scopes}}{A list of query scopes for filter by.}
 
-\item{\code{showAll}}{Show all studies, not just ones within connection query scopes.
-This method returns a integer of how many terms were returned by the data dictionary search.}
+\item{\code{showAll}}{Show all studies, not just ones within connection query scopes.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 A list that contains paths and filtered results.
-This method is used to create new object of this class. DO NOT CREATE THIS OBJECT DIRECTLY!
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PicSureHpdsDictionaryBdcResult-count"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsDictionaryBdcResult-count}{}}}
 \subsection{Method \code{count()}}{
+This method returns a integer of how many terms were returned by the data dictionary search.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsDictionaryBdcResult$count()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
 Return the number of returned results.
-This method returns information about the terms discovered by the data dictionary search in a data frame format.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PicSureHpdsDictionaryBdcResult-entries"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsDictionaryBdcResult-entries}{}}}
 \subsection{Method \code{entries()}}{
+This method returns information about the terms discovered by the data dictionary search in a data frame format.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsDictionaryBdcResult$entries()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
 Return all results.
-Display all information available on a particular HPDS_PATH corresponding to a search result.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PicSureHpdsDictionaryBdcResult-varInfo"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsDictionaryBdcResult-varInfo}{}}}
 \subsection{Method \code{varInfo()}}{
+Display all information available on a particular HPDS_PATH corresponding to a search result.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsDictionaryBdcResult$varInfo(path)}\if{html}{\out{</div>}}
 }
@@ -100,26 +96,26 @@ Display all information available on a particular HPDS_PATH corresponding to a s
 }
 \subsection{Returns}{
 A `Data.Frame` containing the fields for the given path.
-Extract the paths of all results into a list.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PicSureHpdsDictionaryBdcResult-paths"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsDictionaryBdcResult-paths}{}}}
 \subsection{Method \code{paths()}}{
+Extract the paths of all results into a list.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsDictionaryBdcResult$paths()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
 A list of paths returned from the results.
-Flatten the results into a dataframe.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PicSureHpdsDictionaryBdcResult-dataframe"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsDictionaryBdcResult-dataframe}{}}}
 \subsection{Method \code{dataframe()}}{
+Flatten the results into a dataframe.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsDictionaryBdcResult$dataframe()}\if{html}{\out{</div>}}
 }

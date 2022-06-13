@@ -3,20 +3,13 @@
 \docType{class}
 \name{PicSureHpdsQueryBdc}
 \alias{PicSureHpdsQueryBdc}
-\title{R6 class used to build a multi-use query to search against a HPDS resource's data - DO NOT CREATE THIS OBJECT DIRECTLY!
-For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds}
-\format{
-\code{\link{PicSureHpdsQuery}} object.
-This method is used to create new `PicSureHpdsQueryBdc` object. DO NOT CREATE THIS OBJECT DIRECTLY!
-}
+\title{PicSureHpdsQueryBdc}
 \value{
 Object of \code{\link{R6Class}} used to access a HPDS-hosted resource's data dictionary.
 }
 \description{
 R6 class used to build a multi-use query to search against a HPDS resource's data - DO NOT CREATE THIS OBJECT DIRECTLY!
-For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds
-
-R6 class used to build a multi-use query to search against a HPDS resource's data - DO NOT CREATE THIS OBJECT DIRECTLY!
+ 
 For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds
 }
 \keyword{data}
@@ -56,6 +49,7 @@ For full documentation of each method go to https://github.com/hms-dbmi/pic-sure
 \if{html}{\out{<a id="method-PicSureHpdsQueryBdc-new"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsQueryBdc-new}{}}}
 \subsection{Method \code{new()}}{
+This method is used to create new `PicSureHpdsQueryBdc` object. DO NOT CREATE THIS OBJECT DIRECTLY!
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsQueryBdc$new(connection)}\if{html}{\out{</div>}}
 }
@@ -63,8 +57,7 @@ For full documentation of each method go to https://github.com/hms-dbmi/pic-sure
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{connection}}{A `PicSureHpdsResourceConnectionBdc` object.
-This method is used to create new `PicSureHpdsQueryBdc` object. DO NOT CREATE THIS OBJECT DIRECTLY!}
+\item{\code{connection}}{A `PicSureHpdsResourceConnectionBdc` object.}
 }
 \if{html}{\out{</div>}}
 }
@@ -73,6 +66,7 @@ This method is used to create new `PicSureHpdsQueryBdc` object. DO NOT CREATE TH
 \if{html}{\out{<a id="method-PicSureHpdsQueryBdc-buildQuery"></a>}}
 \if{latex}{\out{\hypertarget{method-PicSureHpdsQueryBdc-buildQuery}{}}}
 \subsection{Method \code{buildQuery()}}{
+Generate a query object and modify consents for harmonized and topmed concept paths.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsQueryBdc$buildQuery(resultType = "COUNT")}\if{html}{\out{</div>}}
 }
