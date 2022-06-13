@@ -16,7 +16,6 @@ NULL
 #'
 #' @param connection A PIC-SURE connection object.
 #' @param resourceUUID The UUID identity of a Resource hosted via the PIC-SURE connection.
-#' @param isAuth Flag to note if resource is an authenticated resource.
 #' @return An object which provides access to the requested Resource.
 #' @examples
 #'
@@ -24,9 +23,9 @@ NULL
 #'# myres <- hpds::get.resource(connection=myconn, resourceUUID="YOUR-UUID-0000")
 #'
 #' @export
-get.resource <- function(connection, resourceUUID, isAuth) {
+get.resource <- function(connection, resourceUUID) {
   if (class(connection) == "PicSure_Connection") {
-    result <- PicSureHpdsResourceConnectionBdc$new(connection, resourceUUID, isAuth)
+    result <- PicSureHpdsResourceConnectionBdc$new(connection, resourceUUID)
     class(result) <- "Hpds_Resource"
     return(result)
   } else {
@@ -46,7 +45,7 @@ get.resource <- function(connection, resourceUUID, isAuth) {
 #'
 #' @export
 use.dictionary <- function(connection) {
-  return(get.resource(connection, '36363664-6231-6134-2d38-6538652d3131', TRUE))
+  return(get.resource(connection, '36363664-6231-6134-2d38-6538652d3131'))
 }
 
 #' Get a new reference to the open PIC-SURE HPDS-based resource.
@@ -60,7 +59,7 @@ use.dictionary <- function(connection) {
 #'
 #' @export
 use.openPicSure <- function(connection) {
-  return(get.resource(connection, '70c837be-5ffc-11eb-ae93-0242ac130002', FALSE))
+  return(get.resource(connection, '70c837be-5ffc-11eb-ae93-0242ac130002'))
 }
 
 #' Get a new reference to the auth PIC-SURE HPDS-based resource.
@@ -74,7 +73,7 @@ use.openPicSure <- function(connection) {
 #'
 #' @export
 use.authPicSure <- function (connection) {
-  return(get.resource(connection, '02e23f52-f354-4e8b-992c-d37c8b9ba140', TRUE))
+  return(get.resource(connection, '02e23f52-f354-4e8b-992c-d37c8b9ba140'))
 }
 
 # ===== data dictionary functions =====
@@ -166,7 +165,7 @@ get.varInfo <- function(dictionary.results, path) {
 #' @export
 get.paths <- function(dictionary.results) {
   if (class(dictionary.results) == "Hpds_DictionaryResults") {
-    result <- dictionary.results$listPaths()
+    result <- dictionary.results$paths()
     return(result)
   } else {
     message("Invalid dictionary results was passed to get.paths() function")
