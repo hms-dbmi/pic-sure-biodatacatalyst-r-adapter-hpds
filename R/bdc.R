@@ -16,6 +16,7 @@ NULL
 #'
 #' @param connection A PIC-SURE connection object.
 #' @param resourceUUID The UUID identity of a Resource hosted via the PIC-SURE connection.
+#' @param verbose Flag to display additional runtime information.
 #' @return An object which provides access to the requested Resource.
 #' @examples
 #'
@@ -23,7 +24,7 @@ NULL
 #'# myres <- hpds::get.resource(connection=myconn, resourceUUID="YOUR-UUID-0000")
 #'
 #' @export
-get.resource <- function(connection, resourceUUID) {
+get.resource <- function(connection, resourceUUID, verbose=FALSE) {
   if (class(connection) == "PicSure_Connection") {
     result <- PicSureHpdsResourceConnectionBdc$new(connection, resourceUUID)
     class(result) <- "Hpds_Resource"
@@ -37,6 +38,7 @@ get.resource <- function(connection, resourceUUID) {
 #' Get a new reference to the dictionary HPDS-based PIC-SURE resource.
 #'
 #' @param connection A PIC-SURE connection object.
+#' @param verbose Flag to display additional runtime information.
 #' @return An object which provides access to the dictionary resource.
 #' @examples
 #'
@@ -44,13 +46,14 @@ get.resource <- function(connection, resourceUUID) {
 #'# myres <- hpds::use.dictionary(connection=myconn)
 #'
 #' @export
-use.dictionary <- function(connection) {
+use.dictionary <- function(connection, verbose=FALSE) {
   return(get.resource(connection, '36363664-6231-6134-2d38-6538652d3131'))
 }
 
 #' Get a new reference to the open PIC-SURE HPDS-based resource.
 #'
 #' @param connection A PIC-SURE connection object.
+#' @param verbose Flag to display additional runtime information.
 #' @return An object which provides access to the open PIC-SURE resource.
 #' @examples
 #'
@@ -58,13 +61,14 @@ use.dictionary <- function(connection) {
 #'# myres <- hpds::use.openPicSure(connection=myconn)
 #'
 #' @export
-use.openPicSure <- function(connection) {
+use.openPicSure <- function(connection, verbose=FALSE) {
   return(get.resource(connection, '70c837be-5ffc-11eb-ae93-0242ac130002'))
 }
 
 #' Get a new reference to the auth PIC-SURE HPDS-based resource.
 #'
 #' @param connection A PIC-SURE connection object.
+#' @param verbose Flag to display additional runtime information.
 #' @return An object which provides access to the auth PIC-SURE resource.
 #' @examples
 #'
@@ -72,7 +76,7 @@ use.openPicSure <- function(connection) {
 #'# myres <- hpds::use.authPicSure(connection=myconn)
 #'
 #' @export
-use.authPicSure <- function (connection) {
+use.authPicSure <- function (connection, verbose=FALSE) {
   return(get.resource(connection, '02e23f52-f354-4e8b-992c-d37c8b9ba140'))
 }
 
@@ -83,6 +87,8 @@ use.authPicSure <- function (connection) {
 #'
 #' @param resource A PIC-SURE resource object.
 #' @param term A string to search for in the resource's data dictionary. By default, if no term is provided, the whole dictionary will be returned.
+#' @param limit A limit of return results.
+#' @param offset An offset to start retrning values from.
 #' @param verbose Flag to display additional runtime information.
 #' @return An object representing the search results.
 #' @examples
@@ -92,7 +98,7 @@ use.authPicSure <- function (connection) {
 #'# asthma.terms <- hpds::find.in.dictionary(resource=myres, term="asthma")
 #'
 #' @export
-find.in.dictionary <- function(resource, term="", verbose=FALSE, limit=0, offset=0){
+find.in.dictionary <- function(resource, term="", limit=0, offset=0, verbose=FALSE){
   if (class(resource) == "Hpds_Resource") {
     dictionaryObj <- resource$dictionary()
     class(dictionaryObj) <- "Hpds_Dictionary"
@@ -109,6 +115,7 @@ find.in.dictionary <- function(resource, term="", verbose=FALSE, limit=0, offset
 #' Get the number of results returned in the given data dictionary lookup.
 #'
 #' @param dictionary.results A data dictionary search results object.
+#' @param verbose Flag to display additional runtime information.
 #' @return An integer of how many data dictionary entries were found in
 #' @examples
 #'
@@ -118,7 +125,7 @@ find.in.dictionary <- function(resource, term="", verbose=FALSE, limit=0, offset
 #'# get.count(asthma.terms)
 #'
 #' @export
-get.count <- function(dictionary.results) {
+get.count <- function(dictionary.results, verbose=FALSE) {
   if (class(dictionary.results) == "Hpds_DictionaryResults") {
     result <- dictionary.results$count()
     return(result)
@@ -132,6 +139,7 @@ get.count <- function(dictionary.results) {
 #'
 #' @param dictionary.results A data dictionary search results object.
 #' @param path A character object containing an HPDS path.
+#' @param verbose Flag to display additional runtime information.
 #' @return A data frame object containing variable info for an HPDS path.
 #' @examples
 #'
@@ -141,7 +149,7 @@ get.count <- function(dictionary.results) {
 #'# get.varInfo(asthma.terms, '\\phs001211\\...')
 #'
 #' @export
-get.varInfo <- function(dictionary.results, path) {
+get.varInfo <- function(dictionary.results, path, verbose=FALSE) {
   if (class(dictionary.results) == "Hpds_DictionaryResults") {
     result <- dictionary.results$varInfo(path)
     return(result)
@@ -154,6 +162,7 @@ get.varInfo <- function(dictionary.results, path) {
 #' Get a list of HPDS paths.
 #'
 #' @param dictionary.results A data dictionary search results object.
+#' @param verbose Flag to display additional runtime information.
 #' @return A list of HPDS paths.
 #' @examples
 #'
@@ -163,7 +172,7 @@ get.varInfo <- function(dictionary.results, path) {
 #'# get.paths(asthma.terms)
 #'
 #' @export
-get.paths <- function(dictionary.results) {
+get.paths <- function(dictionary.results, verbose=FALSE) {
   if (class(dictionary.results) == "Hpds_DictionaryResults") {
     result <- dictionary.results$paths()
     return(result)
@@ -176,6 +185,7 @@ get.paths <- function(dictionary.results) {
 #' Get a data frame of consents.
 #'
 #' @param resource A PIC-SURE resource object.
+#' @param verbose Flag to display additional runtime information.
 #' @return A list of HPDS paths.
 #' @examples
 #'
@@ -184,7 +194,7 @@ get.paths <- function(dictionary.results) {
 #'# get.consents(myres)
 #'
 #' @export
-get.consents <- function(resource) {
+get.consents <- function(resource, verbose=FALSE) {
   if (class(resource) == "Hpds_Resource") {
     result <- resource$consents()
     return(result)
@@ -197,6 +207,7 @@ get.consents <- function(resource) {
 #' Get a list of genomic annotations as a data frame.
 #'
 #' @param resource A PIC-SURE resource object.
+#' @param verbose Flag to display additional runtime information.
 #' @return Results in a dataframe object.
 #' @examples
 #'
@@ -205,7 +216,7 @@ get.consents <- function(resource) {
 #'# get.genotypeAnnotations(myres)
 #'
 #' @export
-get.genotypeAnnotations <- function(resource) {
+get.genotypeAnnotations <- function(resource, verbose=FALSE) {
   if (class(resource) == "Hpds_Resource") {
     result <- resource$dictionary()$genotypeAnnotations()
     return(result)
@@ -342,7 +353,7 @@ query.run <- function(query, result.type="results", verbose=FALSE) {
 #'#  myquery <- hpds::query.load(query=myquerydef)
 #'
 #' @export
-query.load<- function(query, query.def="") {
+query.load<- function(query, query.def="", verbose=FALSE) {
   if (class(query) == "Hpds_Query") {
     query$load(query.def)
     return(query)
@@ -356,6 +367,7 @@ query.load<- function(query, query.def="") {
 #'
 #' @param resource A resource object that the returned query object will execute against.
 #' @param uuid the valid UUID of a query to retrieve
+#' @param verbose Flag to display additional runtime information.
 #' @examples
 #'
 #'# myconn <- picsure::connect(url="http://your.server/PIC-SURE/", token="your-security-token")

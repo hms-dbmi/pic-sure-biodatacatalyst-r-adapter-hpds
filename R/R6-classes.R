@@ -1,5 +1,6 @@
 library(hash)
 library(hpds)
+library(stringr)
 
 global_paths = list(
   consent = "\\_consents\\",
@@ -13,27 +14,23 @@ global_paths = list(
 # ======================
 
 #' R6 class that allows access to the data dictionary and query services of a selected HPDS-hosted resources on a PIC-SURE network.
+#' For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds
 #'
 #' @docType class
 #' @importFrom R6 R6Class
 #' @export
 #' @keywords data
 #' @return Object of \code{\link{R6Class}} used to access the dictionary and query services via the objects it returns.
-#' @format \code{\link{PicSureHpdsResourceConnection}} object.
-#' @section Methods:
-#' \describe{
-#'   \item{Documentation}{For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds}
-#'   \item{\code{new(connection, resource_uuid)}}{This method is used to create new object of this class which uses the passed PicSureConnection object for communication with the PIC-SURE network along with a UUID to identify a HPDS-hosted resource.}
-#'
-#'   \item{\code{dictionary()}}{This method returns a \code{PicSureHpdsDictionary} object which is used to run lookups against a resources data dictionary.}
-#'   \item{\code{consents()}}{This method returns a data frame of consents and their status as harmonized or topmed. }
-#'   \item{\code{query()}}{This method returns a new \code{PicSureHpdsQuery} object configured to run all commands against the previously specified HPDS-hosted resource.}}
+#' @format \code{\link{PicSureHpdsResourceConnectionBdc}} object.
 PicSureHpdsResourceConnectionBdc <- R6::R6Class(
   "PicSureHpdsResourceConnectionBdc",
   inherit = hpds::PicSureHpdsResourceConnection,
   portable = FALSE,
   lock_objects = FALSE,
   public = list(
+    #' This method is used to create new object of this class which uses the passed PicSureConnection object for communication with the PIC-SURE network along with a UUID to identify a HPDS-hosted resource.
+    #' @param connection A PIC-SURE connection object.
+    #' @param resource_uuid The UUID identity of a Resource hosted via the PIC-SURE connection.
     initialize = function(connection, resource_uuid) {
       self$connection_reference <- connection
       if (missing(resource_uuid)) {
@@ -54,6 +51,8 @@ PicSureHpdsResourceConnectionBdc <- R6::R6Class(
       self$profile_info = jsonlite::fromJSON(connection$INTERNAL_api_obj()$profile())
       self$dict_instance <- PicSureHpdsDictionaryBdc$new(self)
     },
+    #' This method returns a data frame of consents and their status as harmonized or topmed.
+    #' @return A `Data.Frame` object containing concents and if they are topmed or harmonized.
     consents = function() {
       template <- if (is.null(self$profile_info$queryTemplate)) '{}' else self$profile_info$queryTemplate
       template <- jsonlite::fromJSON(template, simplifyVector=FALSE, simplifyDataFrame=FALSE, simplifyMatrix=FALSE)
@@ -68,6 +67,8 @@ PicSureHpdsResourceConnectionBdc <- R6::R6Class(
       }
       return(data.frame(do.call(rbind.data.frame, consent_table)))
     },
+    #' This method returns a new `PicSureHpdsQueryBdc` object configured to run all commands against the previously specified HPDS-hosted resource.
+    #' @return A `PicSureHpdsQueryBdc` object.
     query = function() {
       return(PicSureHpdsQueryBdc$new(self))
     }
@@ -79,26 +80,23 @@ PicSureHpdsResourceConnectionBdc <- R6::R6Class(
 # ========================
 
 #' R6 class that runs searches against a HPDS resource's data dictionary - DO NOT CREATE THIS OBJECT DIRECTLY!
+#' For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds
 #'
 #' @docType class
 #' @importFrom R6 R6Class
 #' @import jsonlite
+#' @import stringr
+#' @import hash
 #' @export
 #' @keywords data
 #' @return Object of \code{\link{R6Class}} used to access a HPDS-hosted resource's data dictionary.
 #' @format \code{\link{PicSureHpdsDictionary}} object.
-#' @section Methods:
-#' \describe{
-#'   \item{Documentation}{For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds}
-#'   \item{\code{new(refHpdsResourceConnection)}}{This method is used to create new object of this class. DO NOT CREATE THIS OBJECT DIRECTLY!}
-#'
-#'   \item{\code{find(term='', limit, offset, showAll)}}{This method returns a \code{PicSureHpdsDictionaryResult} object containing the results of the search on the HPDS resource's data dictionary.}}
 PicSureHpdsDictionaryBdc <- R6::R6Class(
   "PicSureHpdsDictionaryBdc",
   portable = FALSE,
   lock_objects = FALSE,
   private <- list(
-    # Populate a hash/dictionary of phenotype and genotype concepts
+    #' @description Populate a hash/dictionary of phenotype and genotype concepts.
     lazyLoadConcepts = function() {
       if(!is.null(self$concept_dictionary)) return()
 
@@ -132,13 +130,18 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
     }
   ),
   public = list(
-    initialize = function(refHpdsResourceConnection, writeJson=FALSE) {
-      self$connection <- refHpdsResourceConnection
-      self$resourceUUID <- refHpdsResourceConnection$resourceUUID
-      self$INTERNAL_API_OBJ <- refHpdsResourceConnection$connection_reference$INTERNAL_api_obj()
+    #' This method is used to create new object of this class. DO NOT CREATE THIS OBJECT DIRECTLY!
+    #' @param resourceConnection A `PicSureHpdsResourceConnectionBdc` object.
+    initialize = function(resourceConnection) {
+      self$connection <- resourceConnection
+      self$resourceUUID <- resourceConnection$resourceUUID
+      self$INTERNAL_API_OBJ <- resourceConnection$connection_reference$INTERNAL_api_obj()
       scopes = self$connection$profile_info$queryScopes
       private$included_studies <-  if (is.null(scopes)) c() else str_replace_all(scopes[str_detect(scopes, "^\\\\")], "\\\\", "")
     },
+    #' Helper method to return key/path information from phenotype concept paths.
+    #' @param key The concept path key to look up.
+    #' @return Concept path information or FALSE.
     getKeyInfo = function(key) {
       private$lazyLoadConcepts()
       index = paste0("phenotypes_", key)
@@ -147,6 +150,8 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
       }
       return(FALSE)
     },
+    #' Returns genotype annotations from info concept paths.
+    #' @return a `Data.Frame` object containing a table of genotype annotations.
     genotypeAnnotations = function() {
       private$lazyLoadConcepts()
       concepts = keys(self$concept_dictionary)
@@ -163,6 +168,12 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
       }
       return(data.frame(do.call(rbind.data.frame, annotations)))
     },
+    #' This method returns a `PicSureHpdsDictionaryBdcResult` object containing the results of the search on the HPDS resource's data dictionary.
+    #' @param term Term to find in the dictionary.
+    #' @param limit Number of items to return.
+    #' @param offset The offset record to start returning from.
+    #' @param showAll Show all studies, not just ones within connection query scopes.
+    #' @return A `PicSureHpdsDictionaryBdcResult` object containing results from the dictionary.
     find = function(term, limit, offset, showAll=FALSE) {
       print("Loading data dictionary... (takes a minute)")
       flush.console() # print loading message while we wait for json result and processing
@@ -186,24 +197,16 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
 
 
 #' R6 class contain the results of a search against a HPDS resource's data dictionary - DO NOT CREATE THIS OBJECT DIRECTLY!
+#' For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds
 #'
 #' @docType class
 #' @importFrom R6 R6Class
 #' @import jsonlite
+#' @import stringr
 #' @export
 #' @keywords data
 #' @return Object of \code{\link{R6Class}} used to access a HPDS-hosted resource's data dictionary.
 #' @format \code{\link{PicSureHpdsDictionaryResult}} object.
-#' @section Methods:
-#' \describe{
-#'   \item{Documentation}{For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds}
-#'   \item{\code{new(results)}}{This method is used to create new object of this class. DO NOT CREATE THIS OBJECT DIRECTLY!}
-#'
-#'   \item{\code{count()}}{This method returns a integer of how many terms were returned by the data dictionary search.}
-#'   \item{\code{entries()}}{This method returns information about the terms discovered by the data dictionary search in a data frame format.}
-#'   \item{\code{varInfo(path)}}{Display all information available on a particular HPDS_PATH corresponding to a search result.}
-#'   \item{\code{listPaths()}}{Extract the paths of all results into a list.}
-#'   \item{\code{dataframe()}}{Flatten the results into a dataframe.}
 PicSureHpdsDictionaryBdcResult <- R6::R6Class(
   "PicSureHpdsDictionaryBdcResult",
   portable = FALSE,
@@ -211,6 +214,8 @@ PicSureHpdsDictionaryBdcResult <- R6::R6Class(
   private = list(
     concept_paths = c(),
     results = list(),
+    #' Project and filter fields in query scope from results, mapping them with new field names. 
+    #' @return A list that contains paths and filtered results.
     projectAndFilterResults = function(results, scopes, showAll) {
       in_scope = function(study) Reduce(function(acc, scope) (acc | str_detect(study, fixed(scope))), scopes, init=FALSE)
       include_list <- c()
@@ -242,17 +247,28 @@ PicSureHpdsDictionaryBdcResult <- R6::R6Class(
     }
   ),
   public = list(
+    #' This method is used to create new object of this class. DO NOT CREATE THIS OBJECT DIRECTLY!
+    #' @param results A list of results to process and return.
+    #' @param scopes A list of query scopes for filter by.
+    #' @param showAll Show all studies, not just ones within connection query scopes.
     initialize = function(results, scopes, showAll = FALSE) {
       projected <- private$projectAndFilterResults(results$searchResults, scopes, showAll)
       private$concept_paths <- projected$paths
       private$results <- projected$results
     },
+    #' This method returns a integer of how many terms were returned by the data dictionary search.
+    #' @return Return the number of returned results.
     count = function() {
       return(length(private$results))
     },
+    #' This method returns information about the terms discovered by the data dictionary search in a data frame format.
+    #' @return Return all results.
     entries = function() {
       return(private$results)
     },
+    #' Display all information available on a particular HPDS_PATH corresponding to a search result.
+    #' @param path A path to look for in the results.
+    #' @return A `Data.Frame` containing the fields for the given path.
     varInfo = function(path) {
       result <- private$results[[match(path, private$concept_paths)]]
       if (is.null(result)) return(paste0("No results found for '", path, "'"))
@@ -261,9 +277,13 @@ PicSureHpdsDictionaryBdcResult <- R6::R6Class(
       names(info) <- path
       return(info)
     },
+    #' Extract the paths of all results into a list.
+    #' @return A list of paths returned from the results.
     paths = function() {
       return(private$concept_paths)
     },
+    #' Flatten the results into a dataframe.
+    #' @return A `Data.Frame` of all results.
     dataframe = function() {
       return(data.frame(do.call(rbind.data.frame, private$results)))
     }
@@ -275,6 +295,7 @@ PicSureHpdsDictionaryBdcResult <- R6::R6Class(
 # ===================
 
 #' R6 class used to build a multi-use query to search against a HPDS resource's data - DO NOT CREATE THIS OBJECT DIRECTLY!
+#' For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds
 #'
 #' @docType class
 #' @importFrom R6 R6Class
@@ -284,21 +305,6 @@ PicSureHpdsDictionaryBdcResult <- R6::R6Class(
 #' @keywords data
 #' @return Object of \code{\link{R6Class}} used to access a HPDS-hosted resource's data dictionary.
 #' @format \code{\link{PicSureHpdsQuery}} object.
-#' @section Methods:
-#' \describe{
-#'   \item{Documentation}{For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds}
-#'   \item{\code{new(connection)}}{This method is used to create new object of this class. DO NOT CREATE THIS OBJECT DIRECTLY!}
-#'
-#'   \item{\code{show()}}{This method displays a list of all settings specified for the query.}
-#'   \item{\code{select()}}{This method accesses a reference to a query parameter list.}
-#'   \item{\code{crosscounts()}}{This method accesses a reference to a query parameter list.}
-#'   \item{\code{require()}}{This method accesses a reference to a query parameter list.}
-#'   \item{\code{anyof()}}{This method accesses a reference to a query parameter list.}
-#'   \item{\code{filter()}}{This method accesses a reference to a query parameter list.}
-#'   \item{\code{getCount()}}{This method returns a count of how many records are discovered by the query.}
-#'   \item{\code{getResults()}}{This method returns the records discovered by the query.}
-#'   \item{\code{getResultsDataFrame()}}{This method returns the discovered records in a dataframe format.}
-#'   \item{\code{getRunDetails()}}{This method returns information the performance of the query.}}
 PicSureHpdsQueryBdc <- R6::R6Class(
   "PicSureHpdsQueryBdc",
   inherit = hpds::PicSureHpdsQuery,
@@ -309,12 +315,17 @@ PicSureHpdsQueryBdc <- R6::R6Class(
     topmed_consents = c()
   ),
   public = list(
+    #' This method is used to create new `PicSureHpdsQueryBdc` object. DO NOT CREATE THIS OBJECT DIRECTLY!
+    #' @param connection A `PicSureHpdsResourceConnectionBdc` object.
     initialize = function(connection) {
       super$initialize(connection)
       template = jsonlite::fromJSON(connection$profile_info$queryTemplate)
       private$harmonized_consents = template$categoryFilters[[global_paths$harmonized]]
       private$topmed_consents = template$categoryFilters[[global_paths$topmed]]
     },
+    #' This method is used to create new `PicSureHpdsQueryBdc` object. DO NOT CREATE THIS OBJECT DIRECTLY!
+    #' @param resultType The type of result that should be returned from the api.
+    #' @return An object to use for the query.
     buildQuery = function(resultType="COUNT") {
       filters = self$listFilter$getQueryValues()
       query = list(

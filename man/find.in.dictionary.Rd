@@ -4,12 +4,16 @@
 \alias{find.in.dictionary}
 \title{Search the data dictionary of a PIC-SURE resource.}
 \usage{
-find.in.dictionary(resource, term = "", verbose = FALSE)
+find.in.dictionary(resource, term = "", limit = 0, offset = 0, verbose = FALSE)
 }
 \arguments{
 \item{resource}{A PIC-SURE resource object.}
 
 \item{term}{A string to search for in the resource's data dictionary. By default, if no term is provided, the whole dictionary will be returned.}
+
+\item{limit}{A limit of return results.}
+
+\item{offset}{An offset to start retrning values from.}
 
 \item{verbose}{Flag to display additional runtime information.}
 }

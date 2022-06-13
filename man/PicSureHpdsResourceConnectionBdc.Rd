@@ -3,28 +3,22 @@
 \docType{class}
 \name{PicSureHpdsResourceConnectionBdc}
 \alias{PicSureHpdsResourceConnectionBdc}
-\title{R6 class that allows access to the data dictionary and query services of a selected HPDS-hosted resources on a PIC-SURE network.}
+\title{R6 class that allows access to the data dictionary and query services of a selected HPDS-hosted resources on a PIC-SURE network.
+For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds}
 \format{
-\code{\link{PicSureHpdsResourceConnection}} object.
+\code{\link{PicSureHpdsResourceConnectionBdc}} object.
+This method is used to create new object of this class which uses the passed PicSureConnection object for communication with the PIC-SURE network along with a UUID to identify a HPDS-hosted resource.
 }
 \value{
 Object of \code{\link{R6Class}} used to access the dictionary and query services via the objects it returns.
 }
 \description{
 R6 class that allows access to the data dictionary and query services of a selected HPDS-hosted resources on a PIC-SURE network.
+For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds
 
 R6 class that allows access to the data dictionary and query services of a selected HPDS-hosted resources on a PIC-SURE network.
+For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds
 }
-\section{Methods}{
-
-\describe{
-  \item{Documentation}{For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds}
-  \item{\code{new(connection, resource_uuid)}}{This method is used to create new object of this class which uses the passed PicSureConnection object for communication with the PIC-SURE network along with a UUID to identify a HPDS-hosted resource.}
-
-  \item{\code{dictionary()}}{This method returns a \code{PicSureHpdsDictionary} object which is used to run lookups against a resources data dictionary.}
-  \item{\code{query()}}{This method returns a new \code{PicSureHpdsQuery} object configured to run all commands against the previously specified HPDS-hosted resource.}}
-}
-
 \keyword{data}
 \section{Super class}{
 \code{\link[hpds:PicSureHpdsResourceConnection]{hpds::PicSureHpdsResourceConnection}} -> \code{PicSureHpdsResourceConnectionBdc}
@@ -32,42 +26,69 @@ R6 class that allows access to the data dictionary and query services of a selec
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{PicSureHpdsResourceConnectionBdc$new()}}
-\item \href{#method-query}{\code{PicSureHpdsResourceConnectionBdc$query()}}
-\item \href{#method-clone}{\code{PicSureHpdsResourceConnectionBdc$clone()}}
+\item \href{#method-PicSureHpdsResourceConnectionBdc-new}{\code{PicSureHpdsResourceConnectionBdc$new()}}
+\item \href{#method-PicSureHpdsResourceConnectionBdc-consents}{\code{PicSureHpdsResourceConnectionBdc$consents()}}
+\item \href{#method-PicSureHpdsResourceConnectionBdc-query}{\code{PicSureHpdsResourceConnectionBdc$query()}}
+\item \href{#method-PicSureHpdsResourceConnectionBdc-clone}{\code{PicSureHpdsResourceConnectionBdc$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsResourceConnection" data-id="dictionary">}\href{../../hpds/html/PicSureHpdsResourceConnection.html#method-dictionary}{\code{hpds::PicSureHpdsResourceConnection$dictionary()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsResourceConnection" data-id="getQueryByUUID">}\href{../../hpds/html/PicSureHpdsResourceConnection.html#method-getQueryByUUID}{\code{hpds::PicSureHpdsResourceConnection$getQueryByUUID()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsResourceConnection" data-id="retrieveQueryResults">}\href{../../hpds/html/PicSureHpdsResourceConnection.html#method-retrieveQueryResults}{\code{hpds::PicSureHpdsResourceConnection$retrieveQueryResults()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsResourceConnection" data-id="version">}\href{../../hpds/html/PicSureHpdsResourceConnection.html#method-version}{\code{hpds::PicSureHpdsResourceConnection$version()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsResourceConnection" data-id="dictionary"><a href='../../hpds/html/PicSureHpdsResourceConnection.html#method-PicSureHpdsResourceConnection-dictionary'><code>hpds::PicSureHpdsResourceConnection$dictionary()</code></a></li>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsResourceConnection" data-id="getQueryByUUID"><a href='../../hpds/html/PicSureHpdsResourceConnection.html#method-PicSureHpdsResourceConnection-getQueryByUUID'><code>hpds::PicSureHpdsResourceConnection$getQueryByUUID()</code></a></li>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsResourceConnection" data-id="retrieveQueryResults"><a href='../../hpds/html/PicSureHpdsResourceConnection.html#method-PicSureHpdsResourceConnection-retrieveQueryResults'><code>hpds::PicSureHpdsResourceConnection$retrieveQueryResults()</code></a></li>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsResourceConnection" data-id="version"><a href='../../hpds/html/PicSureHpdsResourceConnection.html#method-PicSureHpdsResourceConnection-version'><code>hpds::PicSureHpdsResourceConnection$version()</code></a></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-PicSureHpdsResourceConnectionBdc-new"></a>}}
+\if{latex}{\out{\hypertarget{method-PicSureHpdsResourceConnectionBdc-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsResourceConnectionBdc$new(connection, resource_uuid)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{connection}}{A PIC-SURE connection object.}
+
+\item{\code{resource_uuid}}{The UUID identity of a Resource hosted via the PIC-SURE connection.
+This method returns a data frame of consents and their status as harmonized or topmed.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-query"></a>}}
-\if{latex}{\out{\hypertarget{method-query}{}}}
-\subsection{Method \code{query()}}{
+\if{html}{\out{<a id="method-PicSureHpdsResourceConnectionBdc-consents"></a>}}
+\if{latex}{\out{\hypertarget{method-PicSureHpdsResourceConnectionBdc-consents}{}}}
+\subsection{Method \code{consents()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsResourceConnectionBdc$query(loadQuery = NA)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsResourceConnectionBdc$consents()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+A `Data.Frame` object containing concents and if they are topmed or harmonized.
+This method returns a new `PicSureHpdsQueryBdc` object configured to run all commands against the previously specified HPDS-hosted resource.
+}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-PicSureHpdsResourceConnectionBdc-query"></a>}}
+\if{latex}{\out{\hypertarget{method-PicSureHpdsResourceConnectionBdc-query}{}}}
+\subsection{Method \code{query()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsResourceConnectionBdc$query()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A `PicSureHpdsQueryBdc` object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PicSureHpdsResourceConnectionBdc-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-PicSureHpdsResourceConnectionBdc-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -4,7 +4,7 @@
 \alias{query.run}
 \title{Run a query instance using any restrictions that have been added to it.}
 \usage{
-query.run(query, result.type = "dataframe", verbose = FALSE)
+query.run(query, result.type = "results", verbose = FALSE)
 }
 \arguments{
 \item{query}{A query instance object.}
