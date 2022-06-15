@@ -19,6 +19,32 @@
       [1] ""
       
 
+# getKeyInfo(): should return correctly formatted list of genotype data
+
+    Code
+      result
+    Output
+      $name
+      [1] "A_Variant"
+      
+      $HpdsDataType
+      [1] "info"
+      
+      $categorical
+      [1] TRUE
+      
+      $categoryValues
+      $categoryValues[[1]]
+      [1] "ABC"
+      
+      $categoryValues[[2]]
+      [1] "DEF"
+      
+      
+      $description
+      [1] "A proper testing description."
+      
+
 # genotypeAnnotations(): should return correctly formatted genomic annotations
 
     Code

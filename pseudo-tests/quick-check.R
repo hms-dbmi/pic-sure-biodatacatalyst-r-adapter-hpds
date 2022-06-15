@@ -1,6 +1,7 @@
 # Quick and dirty script file to test functionality (run manually)
 
 library(picsure)
+library(hpds)
 library(bdc)
 
 runtest = function(url, token) {

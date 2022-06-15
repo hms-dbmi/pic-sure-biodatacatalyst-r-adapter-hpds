@@ -140,3 +140,10 @@
       1 ABC, DEF, GHI
       2              
 
+# dataframe(): should return an empty frame if no search results were found
+
+    Code
+      dictionaryResults$dataframe()
+    Output
+      data frame with 0 columns and 0 rows
+

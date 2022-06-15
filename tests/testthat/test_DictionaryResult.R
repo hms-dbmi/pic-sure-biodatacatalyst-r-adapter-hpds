@@ -66,6 +66,12 @@ describe("PicSureHpdsDictionaryBdcResult", {
       dictionaryResults = PicSureHpdsDictionaryBdcResult$new(api_results, testScopes)
       expect_snapshot(dictionaryResults$entries())
     })
+    it("should return an empty list if no search results were found", {
+      testScopes = c('phs000002')
+      api_results = list(searchResults = list())
+      dictionaryResults = PicSureHpdsDictionaryBdcResult$new(api_results, testScopes)
+      expect_equal(dictionaryResults$entries(), list())
+    })
   })
   describe("varInfo()", {
     testScopes = c('phs000001', 'phs000002')
@@ -101,6 +107,12 @@ describe("PicSureHpdsDictionaryBdcResult", {
     })
     it("should return correctly formatted results", {
       dictionaryResults = PicSureHpdsDictionaryBdcResult$new(api_results, testScopes) 
+      expect_snapshot(dictionaryResults$dataframe())
+    })
+    it("should return an empty frame if no search results were found", {
+      testScopes = c('phs000002')
+      api_results = list(searchResults = list())
+      dictionaryResults = PicSureHpdsDictionaryBdcResult$new(api_results, testScopes)
       expect_snapshot(dictionaryResults$dataframe())
     })
   })

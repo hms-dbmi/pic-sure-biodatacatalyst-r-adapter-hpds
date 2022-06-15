@@ -4,28 +4,35 @@ describe("PicSureHpdsDictionaryBdc", {
   testProfile = jsonlite::toJSON(list(
     queryScopes = list("\\DCC Harmonized data set\\", "\\phs000001\\")
   ), auto_unbox=TRUE)
+  api_results = function(uuid, query) jsonlite::toJSON(list(
+    results = list(
+      phenotypes = list(
+        `\\phs000001\\pht000001\\phv00000001\\test\\` = list(
+          min = 0,
+          max = 5,
+          categorical = FALSE,
+          name = "\\phs000001\\pht000001\\phv00000001\\test\\"
+        )
+      ),
+      info = list(
+        A_Variant = list(
+          description = "Description=\"A proper testing description.\"",
+          values = c("ABC", "DEF"),
+          continuous = FALSE
+        )
+      )
+    )
+  ), auto_unbox=TRUE)
   loadDictionary = function(profile, search) {
     connection = MockConnection$new(profile, search)
     resource = PicSureHpdsResourceConnectionBdc$new(connection, resource_uuid_list[[1]])
     return(resource$dictionary())
   }
   describe("getKeyInfo()", {
-    api_results = function(uuid, query) jsonlite::toJSON(list(
-      results = list(
-        phenotypes = list(
-          `\\phs000001\\pht000001\\phv00000001\\test\\` = list(
-            min = 0,
-            max = 5,
-            categorical = FALSE,
-            name = "\\phs000001\\pht000001\\phv00000001\\test\\"
-          )
-        )
-      )
-    ), auto_unbox=TRUE)
     it("should return FALSE if path does not exist", {
       dictionary = loadDictionary(testProfile, api_results)
       result = dictionary$getKeyInfo("unknown_path")
-      expect_class(result, 'logical')
+      expect_equal(result, FALSE)
     })
     it("should return a list of data if path exists", {
       dictionary = loadDictionary(testProfile, api_results)
@@ -37,19 +44,13 @@ describe("PicSureHpdsDictionaryBdc", {
       result = dictionary$getKeyInfo("\\phs000001\\pht000001\\phv00000001\\test\\")
       expect_snapshot(result)
     })
+    it("should return correctly formatted list of genotype data", {
+      dictionary = loadDictionary(testProfile, api_results)
+      result = dictionary$getKeyInfo("A_Variant")
+      expect_snapshot(result)
+    })
   })
   describe("genotypeAnnotations()", {
-    api_results = function(uuid, query) jsonlite::toJSON(list(
-      results = list(
-        info = list(
-          A_Variant = list(
-            description = "Description=\"A proper testing description.\"",
-            values = c("ABC", "DEF"),
-            continuous = FALSE
-          )
-        )
-      )
-    ), auto_unbox=TRUE)
     it("should return a data.frame object", {
       dictionary = loadDictionary(testProfile, api_results)
       annotations = dictionary$genotypeAnnotations()
