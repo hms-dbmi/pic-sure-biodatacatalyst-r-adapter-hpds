@@ -64,7 +64,7 @@ This method returns a data frame of consents and their status as harmonized or t
 }
 
 \subsection{Returns}{
-A \code{\link{data.frame}} object containing concents and if they are topmed or harmonized.
+A \code{\link{data.frame}} object containing consents and if they are topmed or harmonized.
 }
 }
 \if{html}{\out{<hr>}}

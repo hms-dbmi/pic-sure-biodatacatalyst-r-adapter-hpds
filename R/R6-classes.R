@@ -35,8 +35,8 @@ PicSureHpdsResourceConnectionBdc <- R6::R6Class(
     initialize = function(connection, resource_uuid) {
       self$connection_reference <- connection
       if (missing(resource_uuid)) {
-        if (length(self$connection_reference$self$resource_uuids) > 1) {
-          print(self$connection_reference$self$resource_uuids)
+        if (length(self$connection_reference$resource_uuids) > 1) {  
+          print(self$connection_reference$resource_uuids)
           stop("ERROR: You must specify a valid Resource UUID")
         } else {
           self$resourceUUID <- self$connection_reference$resource_uuids[[1]]
@@ -53,7 +53,7 @@ PicSureHpdsResourceConnectionBdc <- R6::R6Class(
       self$dict_instance <- PicSureHpdsDictionaryBdc$new(self)
     },
     #' @description This method returns a data frame of consents and their status as harmonized or topmed.
-    #' @return A \code{\link{data.frame}} object containing concents and if they are topmed or harmonized.
+    #' @return A \code{\link{data.frame}} object containing consents and if they are topmed or harmonized.
     consents = function() {
       template <- if (is.null(self$profile_info$queryTemplate)) '{}' else self$profile_info$queryTemplate
       template <- jsonlite::fromJSON(template, simplifyVector=FALSE, simplifyDataFrame=FALSE, simplifyMatrix=FALSE)
@@ -102,11 +102,12 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
       if(!is.null(self$concept_dictionary)) return()
 
       # Initial query is blank to get all phenotype and info/genotype data
-      query = jsonlite::toJSON(list(query=""), auto_unbox=TRUE)
+      query = "{\"query\":\"\"}"
       results = self$INTERNAL_API_OBJ$search(self$connection$resourceUUID, query)
       results = jsonlite::fromJSON(results, simplifyVector=FALSE, simplifyDataFrame=FALSE, simplifyMatrix=FALSE)
 
       self$concept_dictionary = hash()
+      self$annotations_paths = if (is.null(results$results$info)) c() else names(results$results$info)
       types = names(results$results)
       for (type_index in 1:length(results$results)){
         type = types[[type_index]]
@@ -125,7 +126,7 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
             categoryValues = if (categorical) values else list(),
             description = if (type != "info") "" else str_replace_all(str_replace(row$description, "Description=", ""), "^\"|\"$", "")
           )
-          self$concept_dictionary[paste0(type, "_", name)] = entry
+          self$concept_dictionary[name] = entry
         }
       }
     }
@@ -145,9 +146,8 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
     #' @return Concept path information or FALSE.
     getKeyInfo = function(key) {
       private$lazyLoadConcepts()
-      index = paste0("phenotypes_", key)
-      if (has.key(index, self$concept_dictionary)) {
-        return(get(index, self$concept_dictionary)) 
+      if (has.key(key, self$concept_dictionary)) {
+        return(get(key, self$concept_dictionary)) 
       }
       return(FALSE)
     },
@@ -155,8 +155,7 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
     #' @return a \code{\link{data.frame}} object containing a table of genotype annotations.
     genotypeAnnotations = function() {
       private$lazyLoadConcepts()
-      concepts = keys(self$concept_dictionary)
-      concepts = concepts[sapply(concepts, function(concept) str_detect(concept, 'info_'))]
+      concepts = self$annotations_paths
       annotations = list()
       for (concept_name in concepts) {
         concept = get(concept_name, self$concept_dictionary)
@@ -175,7 +174,7 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
     #' @param offset The offset record to start returning from.
     #' @param showAll Show all studies, not just ones within connection query scopes.
     #' @return A \code{\link{bdc::PicSureHpdsDictionaryBdcResult}} object containing results from the dictionary.
-    find = function(term, limit, offset, showAll=FALSE) {
+    find = function(term, limit = 0, offset = 0, showAll=FALSE) {
       print("Loading data dictionary... (takes a minute)")
       flush.console() # print loading message while we wait for json result and processing
 
@@ -220,6 +219,9 @@ PicSureHpdsDictionaryBdcResult <- R6::R6Class(
       in_scope = function(study) Reduce(function(acc, scope) (acc | str_detect(study, fixed(scope))), scopes, init=FALSE)
       include_list <- c()
       paths <- c()
+      
+      if (length(results) < 1) return(list(results = list(), paths = paths))
+
       for (index in 1:length(results)) {
         result <- results[[index]]$result$metadata
         categorical = results[[index]]$result$is_categorical
@@ -239,7 +241,7 @@ PicSureHpdsDictionaryBdcResult <- R6::R6Class(
           HPDS_PATH = result$columnmeta_HPDS_PATH,
           min = if (categorical) NA else result$columnmeta_min,
           max = if (categorical) NA else result$columnmeta_max,
-          values = result$values
+          values = toString(result$values)
         )
         include_list <- c(include_list, index)
       }

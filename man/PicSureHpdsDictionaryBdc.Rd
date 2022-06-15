@@ -79,7 +79,7 @@ a \code{\link{data.frame}} object containing a table of genotype annotations.
 \subsection{Method \code{find()}}{
 This method returns a PicSureHpdsDictionaryBdcResult object containing the results of the search on the HPDS resource's data dictionary.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsDictionaryBdc$find(term, limit, offset, showAll = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsDictionaryBdc$find(term, limit = 0, offset = 0, showAll = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
