@@ -30,7 +30,7 @@ PicSureHpdsResourceConnectionBdc <- R6::R6Class(
   lock_objects = FALSE,
   public = list(
     #' @description This method is used to create new object of this class which uses the passed PicSureConnection object for communication with the PIC-SURE network along with a UUID to identify a HPDS-hosted resource.
-    #' @param connection A \code{\link{picsure::PicSureConnection}} PIC-SURE connection object.
+    #' @param connection A picsure::PicSureConnection PIC-SURE connection object.
     #' @param resource_uuid The UUID identity of a Resource hosted via the PIC-SURE connection.
     initialize = function(connection, resource_uuid) {
       self$connection_reference <- connection
@@ -68,8 +68,8 @@ PicSureHpdsResourceConnectionBdc <- R6::R6Class(
       }
       return(data.frame(do.call(rbind.data.frame, consent_table)))
     },
-    #' @description This method returns a new \code{\link{bdc::PicSureHpdsQueryBdc}} object configured to run all commands against the previously specified HPDS-hosted resource.
-    #' @return A \code{\link{bdc::PicSureHpdsQueryBdc}} object.
+    #' @description This method returns a new bdc::PicSureHpdsQueryBdc object configured to run all commands against the previously specified HPDS-hosted resource.
+    #' @return A bdc::PicSureHpdsQueryBdc object.
     query = function() {
       return(PicSureHpdsQueryBdc$new(self))
     }
@@ -133,7 +133,7 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
   ),
   public = list(
     #' @description This method is used to create new PicSureHpdsDictionaryBdc object. DO NOT CREATE THIS OBJECT DIRECTLY!
-    #' @param resourceConnection A \code{\link{bdc::PicSureHpdsResourceConnectionBdc}} object.
+    #' @param resourceConnection A bdc::PicSureHpdsResourceConnectionBdc object.
     initialize = function(resourceConnection) {
       self$connection <- resourceConnection
       self$resourceUUID <- resourceConnection$resourceUUID
@@ -173,7 +173,7 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
     #' @param limit Number of items to return.
     #' @param offset The offset record to start returning from.
     #' @param showAll Show all studies, not just ones within connection query scopes.
-    #' @return A \code{\link{bdc::PicSureHpdsDictionaryBdcResult}} object containing results from the dictionary.
+    #' @return A bdc::PicSureHpdsDictionaryBdcResult object containing results from the dictionary.
     find = function(term, limit = 0, offset = 0, showAll=FALSE) {
       print("Loading data dictionary... (takes a minute)")
       flush.console() # print loading message while we wait for json result and processing
@@ -319,7 +319,7 @@ PicSureHpdsQueryBdc <- R6::R6Class(
   ),
   public = list(
     #' @description This method is used to create new PicSureHpdsQueryBdc object. DO NOT CREATE THIS OBJECT DIRECTLY!
-    #' @param connection A \code{\link{bdc::PicSureHpdsResourceConnectionBdc}} object.
+    #' @param connection A bdc::PicSureHpdsResourceConnectionBdc object.
     initialize = function(connection) {
       super$initialize(connection)
       template = jsonlite::fromJSON(connection$profile_info$queryTemplate)

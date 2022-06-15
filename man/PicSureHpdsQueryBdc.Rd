@@ -57,7 +57,7 @@ This method is used to create new PicSureHpdsQueryBdc object. DO NOT CREATE THIS
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{connection}}{A \code{\link{bdc::PicSureHpdsResourceConnectionBdc}} object.}
+\item{\code{connection}}{A bdc::PicSureHpdsResourceConnectionBdc object.}
 }
 \if{html}{\out{</div>}}
 }

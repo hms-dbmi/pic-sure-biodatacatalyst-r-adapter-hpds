@@ -9,6 +9,8 @@ query.load(query, query.def = "", verbose = FALSE)
 \arguments{
 \item{query}{A JSON string that defines the query instance object.}
 
+\item{query.def}{A query definition to load from.}
+
 \item{verbose}{Flag to display additional runtime information.}
 }
 \description{

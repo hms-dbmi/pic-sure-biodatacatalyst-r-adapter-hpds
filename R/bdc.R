@@ -305,6 +305,7 @@ new.query <- function(resource, verbose=FALSE) {
 #'
 #' @param query A query instance object.
 #' @param result.type A string specifying what type of results to return. Possible values: "count", "dataframe", "variantsApproximateCount" and "variantsDataFrame".
+#' @param verbose Flag to display additional runtime information.
 #' @details Description of result.type values
 ##' \itemize{
 ##'  \item{"count": }{Single count indicating the number of matching records}
@@ -341,6 +342,7 @@ query.run <- function(query, result.type="results", verbose=FALSE) {
 #' Load a query from a JSON-formated string.
 #'
 #' @param query A JSON string that defines the query instance object.
+#' @param query.def A query definition to load from.
 #' @param verbose Flag to display additional runtime information.
 #' @examples
 #'
@@ -366,7 +368,7 @@ query.load<- function(query, query.def="", verbose=FALSE) {
 #' Retrieve an existing query by its unique identifier
 #'
 #' @param resource A resource object that the returned query object will execute against.
-#' @param uuid the valid UUID of a query to retrieve
+#' @param queryUUID the valid UUID of a query to retrieve
 #' @param verbose Flag to display additional runtime information.
 #' @examples
 #'
@@ -389,6 +391,7 @@ query.from.uuid <- function(resource, queryUUID, verbose=FALSE) {
 #' Save a query in JSON-format with any restrictions that have been added to it.
 #'
 #' @param query A query instance object.
+#' @param result.type The type of result to save.
 #' @param verbose Flag to display additional runtime information.
 #' @examples
 #'

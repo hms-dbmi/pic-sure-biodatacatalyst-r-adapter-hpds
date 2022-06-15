@@ -35,7 +35,7 @@ This method is used to create new PicSureHpdsDictionaryBdc object. DO NOT CREATE
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{resourceConnection}}{A \code{\link{bdc::PicSureHpdsResourceConnectionBdc}} object.}
+\item{\code{resourceConnection}}{A bdc::PicSureHpdsResourceConnectionBdc object.}
 }
 \if{html}{\out{</div>}}
 }
@@ -96,7 +96,7 @@ This method returns a PicSureHpdsDictionaryBdcResult object containing the resul
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A \code{\link{bdc::PicSureHpdsDictionaryBdcResult}} object containing results from the dictionary.
+A bdc::PicSureHpdsDictionaryBdcResult object containing results from the dictionary.
 }
 }
 \if{html}{\out{<hr>}}

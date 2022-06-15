@@ -10,6 +10,8 @@ query.run(query, result.type = "results", verbose = FALSE)
 \item{query}{A query instance object.}
 
 \item{result.type}{A string specifying what type of results to return. Possible values: "count", "dataframe", "variantsApproximateCount" and "variantsDataFrame".}
+
+\item{verbose}{Flag to display additional runtime information.}
 }
 \description{
 Run a query instance using any restrictions that have been added to it.

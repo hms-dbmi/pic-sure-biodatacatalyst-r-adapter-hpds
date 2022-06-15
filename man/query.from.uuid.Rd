@@ -9,9 +9,9 @@ query.from.uuid(resource, queryUUID, verbose = FALSE)
 \arguments{
 \item{resource}{A resource object that the returned query object will execute against.}
 
-\item{verbose}{Flag to display additional runtime information.}
+\item{queryUUID}{the valid UUID of a query to retrieve}
 
-\item{uuid}{the valid UUID of a query to retrieve}
+\item{verbose}{Flag to display additional runtime information.}
 }
 \description{
 Retrieve an existing query by its unique identifier
