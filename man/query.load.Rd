@@ -4,10 +4,12 @@
 \alias{query.load}
 \title{Load a query from a JSON-formated string.}
 \usage{
-query.load(query, query.def = "")
+query.load(query, query.def = "", verbose = FALSE)
 }
 \arguments{
 \item{query}{A JSON string that defines the query instance object.}
+
+\item{query.def}{A query definition to load from.}
 
 \item{verbose}{Flag to display additional runtime information.}
 }

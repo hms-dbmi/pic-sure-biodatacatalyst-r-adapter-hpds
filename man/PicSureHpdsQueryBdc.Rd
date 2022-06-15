@@ -3,36 +3,15 @@
 \docType{class}
 \name{PicSureHpdsQueryBdc}
 \alias{PicSureHpdsQueryBdc}
-\title{R6 class used to build a multi-use query to search against a HPDS resource's data - DO NOT CREATE THIS OBJECT DIRECTLY!}
-\format{
-\code{\link{PicSureHpdsQuery}} object.
-}
+\title{PicSureHpdsQueryBdc}
 \value{
 Object of \code{\link{R6Class}} used to access a HPDS-hosted resource's data dictionary.
 }
 \description{
 R6 class used to build a multi-use query to search against a HPDS resource's data - DO NOT CREATE THIS OBJECT DIRECTLY!
-
-R6 class used to build a multi-use query to search against a HPDS resource's data - DO NOT CREATE THIS OBJECT DIRECTLY!
+ 
+For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds
 }
-\section{Methods}{
-
-\describe{
-  \item{Documentation}{For full documentation of each method go to https://github.com/hms-dbmi/pic-sure-r-adapter-hpds}
-  \item{\code{new(connection)}}{This method is used to create new object of this class. DO NOT CREATE THIS OBJECT DIRECTLY!}
-
-  \item{\code{show()}}{This method displays a list of all settings specified for the query.}
-  \item{\code{select()}}{This method accesses a reference to a query parameter list.}
-  \item{\code{crosscounts()}}{This method accesses a reference to a query parameter list.}
-  \item{\code{require()}}{This method accesses a reference to a query parameter list.}
-  \item{\code{anyof()}}{This method accesses a reference to a query parameter list.}
-  \item{\code{filter()}}{This method accesses a reference to a query parameter list.}
-  \item{\code{getCount()}}{This method returns a count of how many records are discovered by the query.}
-  \item{\code{getResults()}}{This method returns the records discovered by the query.}
-  \item{\code{getResultsDataFrame()}}{This method returns the discovered records in a dataframe format.}
-  \item{\code{getRunDetails()}}{This method returns information the performance of the query.}}
-}
-
 \keyword{data}
 \section{Super class}{
 \code{\link[hpds:PicSureHpdsQuery]{hpds::PicSureHpdsQuery}} -> \code{PicSureHpdsQueryBdc}
@@ -40,53 +19,72 @@ R6 class used to build a multi-use query to search against a HPDS resource's dat
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{PicSureHpdsQueryBdc$new()}}
-\item \href{#method-buildQuery}{\code{PicSureHpdsQueryBdc$buildQuery()}}
-\item \href{#method-clone}{\code{PicSureHpdsQueryBdc$clone()}}
+\item \href{#method-PicSureHpdsQueryBdc-new}{\code{PicSureHpdsQueryBdc$new()}}
+\item \href{#method-PicSureHpdsQueryBdc-buildQuery}{\code{PicSureHpdsQueryBdc$buildQuery()}}
+\item \href{#method-PicSureHpdsQueryBdc-clone}{\code{PicSureHpdsQueryBdc$clone()}}
 }
 }
-\if{html}{
-\out{<details ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="anyof">}\href{../../hpds/html/PicSureHpdsQuery.html#method-anyof}{\code{hpds::PicSureHpdsQuery$anyof()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="crosscounts">}\href{../../hpds/html/PicSureHpdsQuery.html#method-crosscounts}{\code{hpds::PicSureHpdsQuery$crosscounts()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="filter">}\href{../../hpds/html/PicSureHpdsQuery.html#method-filter}{\code{hpds::PicSureHpdsQuery$filter()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="getCount">}\href{../../hpds/html/PicSureHpdsQuery.html#method-getCount}{\code{hpds::PicSureHpdsQuery$getCount()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="getResults">}\href{../../hpds/html/PicSureHpdsQuery.html#method-getResults}{\code{hpds::PicSureHpdsQuery$getResults()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="getResultsDataFrame">}\href{../../hpds/html/PicSureHpdsQuery.html#method-getResultsDataFrame}{\code{hpds::PicSureHpdsQuery$getResultsDataFrame()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="getRunDetails">}\href{../../hpds/html/PicSureHpdsQuery.html#method-getRunDetails}{\code{hpds::PicSureHpdsQuery$getRunDetails()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="getVariantsApproximateCount">}\href{../../hpds/html/PicSureHpdsQuery.html#method-getVariantsApproximateCount}{\code{hpds::PicSureHpdsQuery$getVariantsApproximateCount()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="getVariantsDataFrame">}\href{../../hpds/html/PicSureHpdsQuery.html#method-getVariantsDataFrame}{\code{hpds::PicSureHpdsQuery$getVariantsDataFrame()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="load">}\href{../../hpds/html/PicSureHpdsQuery.html#method-load}{\code{hpds::PicSureHpdsQuery$load()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="loadInternal">}\href{../../hpds/html/PicSureHpdsQuery.html#method-loadInternal}{\code{hpds::PicSureHpdsQuery$loadInternal()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="require">}\href{../../hpds/html/PicSureHpdsQuery.html#method-require}{\code{hpds::PicSureHpdsQuery$require()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="save">}\href{../../hpds/html/PicSureHpdsQuery.html#method-save}{\code{hpds::PicSureHpdsQuery$save()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="select">}\href{../../hpds/html/PicSureHpdsQuery.html#method-select}{\code{hpds::PicSureHpdsQuery$select()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="show">}\href{../../hpds/html/PicSureHpdsQuery.html#method-show}{\code{hpds::PicSureHpdsQuery$show()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="anyof"><a href='../../hpds/html/PicSureHpdsQuery.html#method-PicSureHpdsQuery-anyof'><code>hpds::PicSureHpdsQuery$anyof()</code></a></li>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="crosscounts"><a href='../../hpds/html/PicSureHpdsQuery.html#method-PicSureHpdsQuery-crosscounts'><code>hpds::PicSureHpdsQuery$crosscounts()</code></a></li>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="filter"><a href='../../hpds/html/PicSureHpdsQuery.html#method-PicSureHpdsQuery-filter'><code>hpds::PicSureHpdsQuery$filter()</code></a></li>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="getCount"><a href='../../hpds/html/PicSureHpdsQuery.html#method-PicSureHpdsQuery-getCount'><code>hpds::PicSureHpdsQuery$getCount()</code></a></li>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="getResults"><a href='../../hpds/html/PicSureHpdsQuery.html#method-PicSureHpdsQuery-getResults'><code>hpds::PicSureHpdsQuery$getResults()</code></a></li>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="getResultsDataFrame"><a href='../../hpds/html/PicSureHpdsQuery.html#method-PicSureHpdsQuery-getResultsDataFrame'><code>hpds::PicSureHpdsQuery$getResultsDataFrame()</code></a></li>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="getRunDetails"><a href='../../hpds/html/PicSureHpdsQuery.html#method-PicSureHpdsQuery-getRunDetails'><code>hpds::PicSureHpdsQuery$getRunDetails()</code></a></li>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="getVariantsApproximateCount"><a href='../../hpds/html/PicSureHpdsQuery.html#method-PicSureHpdsQuery-getVariantsApproximateCount'><code>hpds::PicSureHpdsQuery$getVariantsApproximateCount()</code></a></li>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="getVariantsDataFrame"><a href='../../hpds/html/PicSureHpdsQuery.html#method-PicSureHpdsQuery-getVariantsDataFrame'><code>hpds::PicSureHpdsQuery$getVariantsDataFrame()</code></a></li>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="load"><a href='../../hpds/html/PicSureHpdsQuery.html#method-PicSureHpdsQuery-load'><code>hpds::PicSureHpdsQuery$load()</code></a></li>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="loadInternal"><a href='../../hpds/html/PicSureHpdsQuery.html#method-PicSureHpdsQuery-loadInternal'><code>hpds::PicSureHpdsQuery$loadInternal()</code></a></li>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="require"><a href='../../hpds/html/PicSureHpdsQuery.html#method-PicSureHpdsQuery-require'><code>hpds::PicSureHpdsQuery$require()</code></a></li>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="save"><a href='../../hpds/html/PicSureHpdsQuery.html#method-PicSureHpdsQuery-save'><code>hpds::PicSureHpdsQuery$save()</code></a></li>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="select"><a href='../../hpds/html/PicSureHpdsQuery.html#method-PicSureHpdsQuery-select'><code>hpds::PicSureHpdsQuery$select()</code></a></li>
+<li><span class="pkg-link" data-pkg="hpds" data-topic="PicSureHpdsQuery" data-id="show"><a href='../../hpds/html/PicSureHpdsQuery.html#method-PicSureHpdsQuery-show'><code>hpds::PicSureHpdsQuery$show()</code></a></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-PicSureHpdsQueryBdc-new"></a>}}
+\if{latex}{\out{\hypertarget{method-PicSureHpdsQueryBdc-new}{}}}
 \subsection{Method \code{new()}}{
+This method is used to create new PicSureHpdsQueryBdc object. DO NOT CREATE THIS OBJECT DIRECTLY!
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsQueryBdc$new(connection)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{connection}}{A bdc::PicSureHpdsResourceConnectionBdc object.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-buildQuery"></a>}}
-\if{latex}{\out{\hypertarget{method-buildQuery}{}}}
+\if{html}{\out{<a id="method-PicSureHpdsQueryBdc-buildQuery"></a>}}
+\if{latex}{\out{\hypertarget{method-PicSureHpdsQueryBdc-buildQuery}{}}}
 \subsection{Method \code{buildQuery()}}{
+Generate a query object and modify consents for harmonized and topmed concept paths.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PicSureHpdsQueryBdc$buildQuery(resultType = "COUNT")}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{resultType}}{The type of result that should be returned from the api.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+An object to use for the query.
+}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-PicSureHpdsQueryBdc-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-PicSureHpdsQueryBdc-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
