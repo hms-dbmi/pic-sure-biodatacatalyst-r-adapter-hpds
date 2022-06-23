@@ -24,5 +24,6 @@ Add a "Filter" restriction to a query instance.
 # myres <- hpds::get.resource(connection=myconn, resourceUUID="YOUR-UUID-0000")
 # myquery <- hpds::new.query(resource=myres)
 # hpds::query.select.add(query=myquery, keys="\\demographics\\SEX\\", values="Male")
+# hpds::query.select.add(query=myquery, keys="\\demographics\\AGE\\", min=1, max=5)
 
 }

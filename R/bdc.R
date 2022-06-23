@@ -619,15 +619,35 @@ query.anyof.delete <- function(query, keys, verbose=FALSE) {
 #'# myres <- hpds::get.resource(connection=myconn, resourceUUID="YOUR-UUID-0000")
 #'# myquery <- hpds::new.query(resource=myres)
 #'# hpds::query.select.add(query=myquery, keys="\\demographics\\SEX\\", values="Male")
+#'# hpds::query.select.add(query=myquery, keys="\\demographics\\AGE\\", min=1, max=5)
 #'
 #' @export
 query.filter.add <- function(query, keys, ..., verbose=FALSE) {
-  if (class(query) == "Hpds_Query") {
-    query$filter()$add(keys, ...)
-  } else {
+  if (class(query) != "Hpds_Query") {
     message("The query given to query.filter.add() is not a Hpds_Query typed object")
     stop()
   }
+  args = list(...)
+  minmaxError = function(errorText) {
+    # load the range list first, so the message text prints after we download the metadata
+    rangeList = Reduce(
+      function(acc, key) {
+        info = query$dictionary$getKeyInfo(key)
+        return(paste(acc, paste('-', key, "min:", info$min, "max:", info$max), sep="\n"))
+      },
+      as.list(keys),
+      init="Min and max ranges for keys provided:"
+    )
+    message(paste0(errorText, "\n\n", rangeList))
+  }
+  
+  if(is.null(args$min) && !is.null(args$max)){
+    return(minmaxError('Please specify a minimum value.'))
+  } else if(is.null(args$max) && !is.null(args$min)){
+    return(minmaxError('Please specify a maximum value.'))
+  }
+  
+  query$filter()$add(keys, ...)
 }
 
 

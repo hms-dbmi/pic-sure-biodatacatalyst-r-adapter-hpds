@@ -124,6 +124,8 @@ PicSureHpdsDictionaryBdc <- R6::R6Class(
             HpdsDataType = HpdsDataType,
             categorical = categorical,
             categoryValues = if (categorical) values else list(),
+            min = if (type == "phenotypes") row$min else NA,
+            max = if (type == "phenotypes") row$max else NA,
             description = if (type != "info") "" else str_replace_all(str_replace(row$description, "Description=", ""), "^\"|\"$", "")
           )
           self$concept_dictionary[name] = entry
@@ -229,6 +231,7 @@ PicSureHpdsDictionaryBdcResult <- R6::R6Class(
 
         paths <- c(paths, result$columnmeta_HPDS_PATH)
         results[[index]] <- list(
+          var_id = result$derived_var_id,
           var_name = result$derived_var_name,
           var_description = result$derived_var_description,
           data_type = result$columnmeta_data_type,

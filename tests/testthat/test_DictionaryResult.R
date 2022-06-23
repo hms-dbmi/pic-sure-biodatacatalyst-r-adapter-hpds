@@ -5,6 +5,7 @@ describe("PicSureHpdsDictionaryBdcResult", {
       list(
         result = list(
           metadata = list(
+            derived_var_id = 'phv00000001.v1',
             derived_var_name = 'test_variable_cat',
             derived_var_description = 'This is a categorical test variable',
             columnmeta_data_type = 'categorical',
@@ -23,6 +24,7 @@ describe("PicSureHpdsDictionaryBdcResult", {
       list(
         result = list(
           metadata = list(
+            derived_var_id = 'phv00000002.v1',
             derived_var_name = 'test_variable_cont',
             derived_var_description = 'This is a continuous test variable',
             columnmeta_data_type = 'continuous',

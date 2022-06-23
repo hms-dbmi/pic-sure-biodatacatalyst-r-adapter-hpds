@@ -1,4 +1,5 @@
 expect_class = function(obj, type) expect_equal(class(obj)[[1]], type)
+expect_no_message = function(method) expect_message(method, regex = NA)
 
 resource_uuid_list = list(
   "36363664-6231-6134-2d38-6538652d3131",
