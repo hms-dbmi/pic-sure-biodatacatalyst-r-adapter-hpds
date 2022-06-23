@@ -15,6 +15,12 @@
       $categoryValues
       list()
       
+      $min
+      [1] 0
+      
+      $max
+      [1] 5
+      
       $description
       [1] ""
       
@@ -40,6 +46,12 @@
       $categoryValues[[2]]
       [1] "DEF"
       
+      
+      $min
+      [1] NA
+      
+      $max
+      [1] NA
       
       $description
       [1] "A proper testing description."

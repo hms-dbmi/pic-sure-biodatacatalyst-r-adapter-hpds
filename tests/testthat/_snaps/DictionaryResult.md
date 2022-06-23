@@ -4,6 +4,9 @@
       dictionaryResults$entries()
     Output
       [[1]]
+      [[1]]$var_id
+      [1] "phv00000001.v1"
+      
       [[1]]$var_name
       [1] "test_variable_cat"
       
@@ -51,6 +54,9 @@
       dictionaryResults$entries()
     Output
       [[1]]
+      [[1]]$var_id
+      [1] "phv00000002.v1"
+      
       [[1]]$var_name
       [1] "test_variable_cont"
       
@@ -98,6 +104,7 @@
       info
     Output
                         \\phs000001\\pht0000001\\phv00000001\\test_variable_cat\\
+      var_id                                                       phv00000001.v1
       var_name                                                  test_variable_cat
       var_description                         This is a categorical test variable
       data_type                                                       categorical
@@ -124,15 +131,18 @@
     Code
       dictionaryResults$dataframe()
     Output
-                  var_name                     var_description   data_type
-      1  test_variable_cat This is a categorical test variable categorical
-      2 test_variable_cont  This is a continuous test variable  continuous
-                    group_id             group_name             group_description
-      1 categorical group id categorical group name categorical group description
-      2  continuous group id  continuous group name  continuous group description
-                    study_id             study_description is_stigmatized
-      1 categorical study id categorical study description          FALSE
-      2  continuous study id  continuous study description          FALSE
+                var_id           var_name                     var_description
+      1 phv00000001.v1  test_variable_cat This is a categorical test variable
+      2 phv00000002.v1 test_variable_cont  This is a continuous test variable
+          data_type             group_id             group_name
+      1 categorical categorical group id categorical group name
+      2  continuous  continuous group id  continuous group name
+                    group_description             study_id
+      1 categorical group description categorical study id
+      2  continuous group description  continuous study id
+                    study_description is_stigmatized
+      1 categorical study description          FALSE
+      2  continuous study description          FALSE
                                                          HPDS_PATH min max
       1  \\phs000001\\pht0000001\\phv00000001\\test_variable_cat\\  NA  NA
       2 \\phs000002\\pht0000001\\phv00000001\\test_variable_cont\\   1   5
