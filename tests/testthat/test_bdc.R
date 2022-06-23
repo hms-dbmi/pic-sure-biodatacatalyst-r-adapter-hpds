@@ -40,7 +40,7 @@ describe("bdc", {
     it('should not give an error message when min and max are given', {
       query = newQuery()
 
-      expect_no_message(bdc::query.filter.add(query, path, min=1, max=5))
+      expect_no_message(bdc::query.filter.add(query, path, max=5, min=1))
     })
     it('should output error message matching snapshot when max is specified without min', {
       query = newQuery()
