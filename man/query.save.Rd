@@ -9,6 +9,8 @@ query.save(query, result.type = "dataframe", verbose = FALSE)
 \arguments{
 \item{query}{A query instance object.}
 
+\item{result.type}{The type of result to save.}
+
 \item{verbose}{Flag to display additional runtime information.}
 }
 \description{
